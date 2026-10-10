@@ -1,0 +1,7 @@
+# cloned straight into config\xirml, these are yours, not the repository's
+settings.ini
+layouts/
+licenses/
+*.pre-*
+_site/
+__pycache__/

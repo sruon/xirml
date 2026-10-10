@@ -1,0 +1,7 @@
+/* classic's own highlight (cursor = theme): a soft fill without an edge */
+.cursor {
+	border-radius: 2dp;
+	decorator: linear-gradient(90deg, var(--cursor-fill), var(--cursor-fill-end));
+	box-shadow: none;
+}
+.cursor-bar { display: none; }

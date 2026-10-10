@@ -1,0 +1,57 @@
+/*
+ phoenix: loads after components.rcss. A frame drawn entirely in CSS: a peach outer line, a dark gap and a red inner line
+ (inset shadows), ember light from the bottom and in the corners, and the title on the top line like classic's.
+*/
+
+.glass {
+	overflow: visible; /* the title sits on the top line, partly above the content */
+	border: 1dp var(--glass-border);
+	decorator:
+		linear-gradient(180deg, var(--glass-top), var(--glass-bottom)),
+		radial-gradient(140% 60% at 50% 115%, var(--glass-tint), var(--gold)00);
+	box-shadow: var(--frame-gap) 0 0 0 2dp inset, var(--royal)b3 0 0 0 3dp inset, var(--glass-shadow);
+}
+
+/* ember glow in the corners instead of modern's diagonal sheen */
+.sheen {
+	decorator:
+		radial-gradient(circle 26dp at left top, var(--ember-corner), var(--gold)00),
+		radial-gradient(circle 26dp at right top, var(--ember-corner), var(--gold)00),
+		radial-gradient(circle 26dp at left bottom, var(--royal)40, var(--royal)00),
+		radial-gradient(circle 26dp at right bottom, var(--royal)40, var(--royal)00);
+}
+.sigil { display: none; }
+
+/* the title sits centred on the top line, outlined in the glass colour so the line stops on both sides */
+.header { position: relative; }
+.panel-title {
+	position: absolute; left: 0; right: 0; top: -8dp;
+	text-align: center;
+	color: var(--title);
+	font-effect: glow(0dp 4dp 0dp 0dp var(--royal)80), outline(2dp var(--title-outline));
+}
+.glass .band.head .seg { /* needs to beat contract.rml's heading style, which loads after this sheet */
+	color: var(--title);
+	font-effect: glow(0dp 4dp 0dp 0dp var(--royal)80), outline(2dp var(--title-outline));
+}
+.panel-title.named { display: block; }
+
+/* rules glow brightest in the middle */
+.rule, .band-rule { decorator: linear-gradient(90deg, var(--royal)00, var(--royal)8c 22%, var(--gold)cc 50%, var(--royal)8c 78%, var(--royal)00); }
+
+/* settings panel: only the title sits on the line */
+.cfg-subtitle { display: none; }
+.cfg-nav-item.on { decorator: linear-gradient(90deg, var(--royal)00, var(--royal)40); box-shadow: var(--royal) -2dp 0 0 0 inset; }
+
+/* a sheet without a name: only the title sits on the line, without the empty band and its rule */
+.header.bare { height: var(--sheet-header-bare); padding: 0; }
+.rule.bare { display: none; }
+.sheet-head-name { align-self: flex-end; }
+
+/* chat: a thin red line along the top, and the active tab marked like the site's menu */
+.chat-glass { box-shadow: var(--royal)66 0 1dp 0 0 inset; }
+.chat-tab.active { border-bottom: 0; border-top: 2dp var(--royal); }
+.chat-label.tone-gold, .chat-label.tone-red, .chat-label.tone-green, .chat-label.tone-blue, .chat-label.tone-violet { border-bottom: 2dp var(--royal); }
+
+/* the help strip's edge */
+.strip.help .strip-text { border-left: 2dp var(--royal); }

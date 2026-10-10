@@ -1,0 +1,9 @@
+/* cursor = game: the game's orange selection bar (its button art tinted 0x613C20, where 0x80 is full) */
+.cursor {
+	border-radius: 9dp;
+	decorator: linear-gradient(180deg, #321e12 0%, #533720 10%, #644427 20%, #764d2c 30%, #83552f 38%, #704a2b 50%, #5d3a25 57%, #50321f 63%, #442a1a 70%, #382214 76%, #322012 85%, #19100a 100%);
+	box-shadow: none;
+}
+.cursor-bar { display: none; }
+/* in a game menu, start the bar where the game's button starts */
+.glass > .cursor { left: 16dp; right: 9dp; }

@@ -1,0 +1,2 @@
+/* cursor_pointer = none: no pointer, and rows don't indent */
+.cursor-pointer { display: none; }

@@ -1,0 +1,25 @@
+<rml>
+<head>
+<title>xirml edit mode</title>
+<link type="text/template" href="xirml:theme"/>
+<style>
+/* the edit mode overlay: a box per panel, its label and resize handle, the alignment guides and the hint; boxes and guides are back buffer px */
+body { width: 100%; height: 100%; font-family: var(--font-body); font-size: 9dp; color: #f2e2b8; }
+.box { position: absolute; box-sizing: border-box; border: 1dp #e8c98a90; background-color: #e8c98a12; border-radius: 3dp; }
+.box.group { border-color: #8fd9c990; background-color: #8fd9c90e; }
+.box.active { border-color: #e8c98a; background-color: #e8c98a24; }
+.label { position: absolute; left: 3dp; top: -12dp; padding: 0 3dp; background-color: #000000c0; border-radius: 2dp; white-space: nowrap; }
+.handle { position: absolute; right: 1dp; bottom: 1dp; width: 8dp; height: 8dp; background-color: #e8c98a; border-radius: 2dp; }
+.guide { position: absolute; left: 0; top: 0; width: 100%; height: 1dp; background-color: #6fd3ffd0; }
+.guide.vertical { width: 1dp; height: 100%; }
+.hint { position: absolute; left: 0; right: 0; top: 64dp; text-align: center; font-size: 10dp; }
+.hint span { padding: 2dp 8dp; background-color: #000000c0; border-radius: 3dp; }
+</style>
+</head>
+<body data-model="edit">
+<div class="hint"><span>{{hint}}</span></div>
+<div class="box" data-for="b : boxes" data-class-active="b.active" data-class-group="b.group" data-style-left="b.box.left + 'px'" data-style-top="b.box.top + 'px'"
+	data-style-width="(b.box.right - b.box.left) + 'px'" data-style-height="(b.box.bottom - b.box.top) + 'px'"><div class="label">{{b.label}}</div><div class="handle"/></div>
+<div class="guide" data-for="g : guides" data-class-vertical="g.vertical" data-style-left="g.vertical ? g.at + 'px' : '0'" data-style-top="g.vertical ? '0' : g.at + 'px'"/>
+</body>
+</rml>

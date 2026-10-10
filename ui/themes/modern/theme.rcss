@@ -1,0 +1,6 @@
+/*
+ modern: the default look, which is ui/base/theme.rcss unchanged. Saving from the Theme page writes your changes here.
+*/
+
+body {
+}

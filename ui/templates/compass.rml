@@ -1,0 +1,32 @@
+<rml>
+<head>
+<title>xirml compass</title>
+<link type="text/template" href="xirml:theme"/>
+<style>
+/* layout only. rows holds the one clock row; name is non-empty while the client shows its clock.
+   The document covers the dial (drawn separately, on the client's disc, centred on CompassDialX/Y in model/compass.hpp) and the clock line under it.
+   Row: label time, value grid, tone day (0-7), fill/extra/extraTone the moon (lit fraction, percent, wax|wane), role the marker's name.
+   Title is the moon phase; chips carries the optional zone weather. */
+body { width: 100%; height: 100%; }
+</style>
+</head>
+<body data-model="sheet">
+<div class="shell">
+	<div class="compass-clock" data-for="r : rows" data-if="name != ''">
+		<div data-attr-class="'compass-day d' + r.tone"/>
+		<div class="compass-time">{{r.label}}</div>
+		<div class="compass-grid">{{r.value}}</div>
+		<div data-for="w : chips" data-attr-class="'compass-weather ' + w.tone">{{w.value}}</div>
+		<div class="compass-lunar" data-if="r.extra != ''">
+			<div data-attr-class="'compass-moon ' + r.extraTone">
+				<div class="hemisphere"/>
+				<div data-attr-class="'terminator ' + (r.fill < 0.5 ? 'shade' : 'light')" data-if="r.fill != 0.5" data-style-transform="'scaleX(' + (r.fill < 0.5 ? 1 - 2 * r.fill : 2 * r.fill - 1) + ')'"/>
+			</div>
+			<div class="compass-moon-value">{{r.extra}}</div>
+			<div data-attr-class="'compass-moon-trend ' + r.extraTone" data-if="title != 'New Moon' && title != 'Full Moon'">{{r.extraTone == 'wax' ? '↑' : '↓'}}</div>
+		</div>
+		<div class="compass-label" data-if="r.role != ''">{{r.role}}</div>
+	</div>
+</div>
+</body>
+</rml>

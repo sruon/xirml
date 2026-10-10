@@ -1,0 +1,277 @@
+<rml>
+<head>
+<title>xirml settings</title>
+<link type="text/template" href="xirml:theme"/>
+<style>
+/* A larger settings document; page width follows the available space beside the nav. */
+body { width: 100%; height: 100%; }
+.cfg-header { cursor: move; }
+.cfg-body { position: relative; flex: 1; }
+.cfg-nav { position: absolute; left: 0; top: 0; bottom: 0; }
+.cfg-page { position: absolute; left: 96dp; right: 0; top: 0; bottom: 0; padding: 8dp var(--pad) 10dp 10dp; overflow-y: auto; }
+.theme-options { flex-wrap: wrap; }
+.theme-option { box-sizing: border-box; flex: 0 0 20%; min-width: 54dp; height: auto; min-height: 30dp; line-height: 16dp; padding: 3dp 2dp 0 2dp; font-size: 9.5dp; white-space: normal; word-break: break-word; }
+.theme-description { word-break: break-word; }
+.theme-option .swatch { display: block; margin: 0 auto 1dp auto; }
+.style-option { width: 23dp; }
+.cursor-option { flex: 1 1 auto; padding: 0 3dp; white-space: nowrap; text-transform: capitalize; } /* the names are the files under ui/cursors */
+.theme-page { overflow: hidden; display: flex; flex-direction: column; padding-bottom: 6dp; }
+/* a three-row list the chosen highlight and pointer style, as every panel's list is */
+.cursor-demo { position: relative; height: 66dp; margin: 6dp 0 2dp 0; }
+.cursor-demo .row { height: 22dp; padding-left: 20dp; }
+.cursor-demo .cursor { height: 22dp; transform: translateY(22dp); }
+</style>
+</head>
+<body data-model="config">
+<div class="shell" id="shell">
+<div class="glass" id="panel">
+	<div class="sheen"/>
+	<div class="header cfg-header" data-event-mousedown="drag()">
+		<div class="sigil">◇</div>
+		<div class="panel-title">xirml</div>
+		<div class="cfg-subtitle">Settings</div>
+		<div class="cfg-close icon" data-event-click="close()">{{ 'close' | icon }}</div>
+	</div>
+	<div class="rule"/>
+	<div class="cfg-body">
+		<div class="cfg-nav">
+			<div class="cfg-nav-item" data-class-on="tab == 'look'" data-event-click="tab = 'look'; confirm = ''"><span class="icon">{{ 'appearance' | icon }}</span>Appearance</div>
+			<div class="cfg-nav-item" data-class-on="tab == 'panels'" data-event-click="tab = 'panels'; confirm = ''"><span class="icon">{{ 'panels' | icon }}</span>Panels</div>
+			<div class="cfg-nav-item" data-class-on="tab == 'names'" data-event-click="tab = 'names'; confirm = ''"><span class="icon">{{ 'nameplates' | icon }}</span>Nameplates</div>
+			<div class="cfg-nav-item" data-class-on="tab == 'chat'" data-event-click="tab = 'chat'; confirm = ''"><span class="icon">{{ 'more' | icon }}</span>Chat</div>
+			<div class="cfg-nav-item" data-class-on="tab == 'layout'" data-event-click="tab = 'layout'; confirm = ''"><span class="icon">{{ 'layout' | icon }}</span>Layout</div>
+			<div class="cfg-nav-item" data-class-on="tab == 'theme'" data-event-click="tab = 'theme'; confirm = ''"><span class="icon">{{ 'theme' | icon }}</span>Theme</div>
+			<div class="cfg-nav-item" data-class-on="tab == 'info'" data-event-click="tab = 'info'; confirm = ''"><span class="icon">{{ 'diagnostics' | icon }}</span>Diagnostics</div>
+		</div>
+
+		<!-- appearance -->
+		<div class="cfg-page keep-scroll" id="cfg-page-look" data-if="tab == 'look'">
+			<div class="cfg-section">This window</div>
+			<div class="cfg-row">
+				<div class="cfg-label">Size<div class="cfg-sub">Ctrl + mouse wheel also works.</div></div>
+				<input type="range" class="slider" min="1" max="2" step="0.1" data-value="windowSize" data-event-change="setWindowSize()"/>
+				<div class="cfg-value">{{windowSize | format(1)}}×</div>
+			</div>
+
+			<div class="cfg-section">Theme</div>
+			<div class="segmented theme-options">
+				<div class="pick theme-option" data-for="t : themes" data-attr-theme-id="t.id" data-class-on="settings.theme == t.id" data-event-click="setting('theme', t.id)"><div class="swatch" data-attr-style="t.swatch"/><span class="theme-label">{{t.name}}</span></div>
+			</div>
+			<div class="cfg-hint theme-description">{{themeDescription}}</div>
+
+			<div class="cfg-section" data-if="windowStyleArt">Window style art</div>
+			<div class="segmented" data-if="windowStyleArt">
+				<div class="pick" data-class-on="settings.nativeStyle &lt; 0" data-event-click="setting('native_style', '-1')">Game</div>
+				<div class="pick style-option" data-class-on="settings.nativeStyle == 0" data-event-click="setting('native_style', '0')">0</div>
+				<div class="pick style-option" data-class-on="settings.nativeStyle == 1" data-event-click="setting('native_style', '1')">1</div>
+				<div class="pick style-option" data-class-on="settings.nativeStyle == 2" data-event-click="setting('native_style', '2')">2</div>
+				<div class="pick style-option" data-class-on="settings.nativeStyle == 3" data-event-click="setting('native_style', '3')">3</div>
+				<div class="pick style-option" data-class-on="settings.nativeStyle == 4" data-event-click="setting('native_style', '4')">4</div>
+				<div class="pick style-option" data-class-on="settings.nativeStyle == 5" data-event-click="setting('native_style', '5')">5</div>
+				<div class="pick style-option" data-class-on="settings.nativeStyle == 6" data-event-click="setting('native_style', '6')">6</div>
+				<div class="pick style-option" data-class-on="settings.nativeStyle == 7" data-event-click="setting('native_style', '7')">7</div>
+			</div>
+
+			<div class="cfg-section">Highlight</div>
+			<div class="segmented">
+				<div class="pick cursor-option" data-for="c : cursorStyles" data-class-on="settings.cursor == c" data-event-click="setting('cursor', c)">{{c}}</div>
+			</div>
+
+			<div class="cfg-section">Pointer</div>
+			<div class="segmented">
+				<div class="pick cursor-option" data-for="c : pointerKinds" data-class-on="settings.pointer == c" data-event-click="setting('cursor_pointer', c)">{{c}}</div>
+			</div>
+			<div class="cfg-section">Menu rows</div>
+			<div class="segmented">
+				<div class="pick cursor-option" data-for="r : rowStyles" data-class-on="settings.rows == r" data-event-click="setting('row_style', r)">{{r}}</div>
+			</div>
+			<div class="cfg-row">
+				<div class="cfg-label">Cursor glide</div>
+				<input type="range" class="slider" min="0" max="0.25" step="0.01" data-attr-value="cursorGlide" data-event-change="tokenDial(7)"/>
+				<div class="cfg-value">{{cursorGlide | format(2)}}s</div>
+			</div>
+			<div class="cursor-demo">
+				<div class="cursor"><div class="cursor-bar"/><div class="cursor-pointer"/></div>
+				<div class="row"><div class="name">Potion</div></div>
+				<div class="row selected"><div class="name">Hi-Potion</div></div>
+				<div class="row"><div class="name">Ether</div></div>
+			</div>
+
+			<div class="cfg-section">Replacement</div>
+			<div class="cfg-row">
+				<div class="cfg-label">Replace native windows<div class="cfg-sub">Off restores every native window at once.</div></div>
+				<div class="toggle" data-class-on="settings.enabled" data-event-click="setting('enabled', settings.enabled ? 'off' : 'on')"><div class="knob"/></div>
+			</div>
+		</div>
+
+		<!-- panels -->
+		<div class="cfg-page keep-scroll" id="cfg-page-panels" data-if="tab == 'panels'">
+			<div class="cfg-hint">Switch a window off to keep it native. Native puts it back for this session only.</div>
+			<div class="cfg-section">HUD</div>
+			<div class="cfg-window" data-for="w : settings.windows" data-if="w.group == 'hud'">
+				<div class="cfg-label">{{w.name}}<div class="cfg-sub">{{w.id}}</div></div>
+				<div class="chip" data-if="w.open &amp;&amp; !w.native &amp;&amp; !w.denied">open</div>
+				<div class="btn small" data-class-on="w.native" data-event-click="native(w.id)">Native</div>
+				<div class="toggle" data-class-on="!w.denied" data-event-click="deny(w.id)"><div class="knob"/></div>
+			</div>
+			<div class="cfg-section">Inventory and equipment</div>
+			<div class="cfg-window" data-for="w : settings.windows" data-if="w.group == 'inventory'">
+				<div class="cfg-label">{{w.name}}<div class="cfg-sub">{{w.id}}</div></div>
+				<div class="chip" data-if="w.open &amp;&amp; !w.native &amp;&amp; !w.denied">open</div>
+				<div class="btn small" data-class-on="w.native" data-event-click="native(w.id)">Native</div>
+				<div class="toggle" data-class-on="!w.denied" data-event-click="deny(w.id)"><div class="knob"/></div>
+			</div>
+			<div class="cfg-section">Status</div>
+			<div class="cfg-window" data-for="w : settings.windows" data-if="w.group == 'status'">
+				<div class="cfg-label">{{w.name}}<div class="cfg-sub">{{w.id}}</div></div>
+				<div class="chip" data-if="w.open &amp;&amp; !w.native &amp;&amp; !w.denied">open</div>
+				<div class="btn small" data-class-on="w.native" data-event-click="native(w.id)">Native</div>
+				<div class="toggle" data-class-on="!w.denied" data-event-click="deny(w.id)"><div class="knob"/></div>
+			</div>
+			<div class="cfg-section">Menus</div>
+			<div class="cfg-hint">Every other menu gets a panel the first time it opens; the ones seen so far:</div>
+			<div class="cfg-window" data-for="w : settings.windows" data-if="w.group == 'menus'">
+				<div class="cfg-label">{{w.name}}<div class="cfg-sub">{{w.id}}</div></div>
+				<div class="chip" data-if="w.open &amp;&amp; !w.native &amp;&amp; !w.denied">open</div>
+				<div class="btn small" data-class-on="w.native" data-event-click="native(w.id)">Native</div>
+				<div class="toggle" data-class-on="!w.denied" data-event-click="deny(w.id)"><div class="knob"/></div>
+			</div>
+		</div>
+
+		<!-- nameplates -->
+		<div class="cfg-page keep-scroll" id="cfg-page-names" data-if="tab == 'names'">
+			<div class="cfg-section">Names over characters</div>
+			<div class="cfg-row">
+				<div class="cfg-label">Themed nameplates<div class="cfg-sub">The client's colours and fade are kept.</div></div>
+				<div class="toggle" data-class-on="settings.nameplates" data-event-click="setting('nameplates', settings.nameplates ? 'off' : 'on')"><div class="knob"/></div>
+			</div>
+			<div class="cfg-row">
+				<div class="cfg-label">Size<div class="cfg-sub">Against the client's own name height.</div></div>
+				<input type="range" class="slider" min="0.6" max="1.6" step="0.05" data-value="plateSize" data-event-change="setSize()"/>
+				<div class="cfg-value">{{plateSize | format(2)}}×</div>
+			</div>
+            <div class="cfg-section">Nameplate appearance</div>
+            <div class="cfg-hint">Changes preview live in this theme. Save keeps them.</div>
+            <div class="cfg-row">
+                <div class="cfg-label">Vertical position</div>
+                <input type="range" class="slider" min="-24" max="24" step="1" data-attr-value="plateOffsetY" data-event-change="tokenDial(0)"/>
+                <div class="cfg-value">{{plateOffsetY | format(2)}}px</div>
+            </div>
+            <div class="cfg-row">
+                <div class="cfg-label">Text slant</div>
+                <input type="range" class="slider" min="0" max="0.4" step="0.01" data-attr-value="plateItalic" data-event-change="tokenDial(1)"/>
+                <div class="cfg-value">{{plateItalic | format(2)}}</div>
+            </div>
+            <div class="cfg-row">
+                <div class="cfg-label">Text outline</div>
+                <input type="range" class="slider" min="0" max="8" step="1" data-attr-value="plateOutline" data-event-change="tokenDial(2)"/>
+                <div class="cfg-value">{{plateOutline | format(2)}}</div>
+            </div>
+            <div class="cfg-row">
+                <div class="cfg-label">Text shadow</div>
+                <input type="range" class="slider" min="0" max="8" step="1" data-attr-value="plateShadow" data-event-change="tokenDial(3)"/>
+                <div class="cfg-value">{{plateShadow | format(2)}}</div>
+            </div>
+            <div class="segmented">
+                <div class="btn small" data-event-click="tokenSave()">Save appearance</div>
+                <div class="btn small" data-event-click="tokenRevert()">Revert</div>
+                <div class="btn small" data-event-click="tab = 'theme'; confirm = ''">Fonts and colours</div>
+            </div>
+		</div>
+
+		<!-- fonts: a face per role; Save writes the font tokens into the active theme's theme.rcss -->
+		<!-- chat -->
+		<div class="cfg-page keep-scroll" id="cfg-page-chat" data-if="tab == 'chat'">
+			<div class="cfg-section">Chat log text</div>
+			<div class="cfg-hint">Changes show live. Save keeps them, Revert returns to the theme.</div>
+			<div class="cfg-row">
+				<div class="cfg-label">Text size</div>
+				<input type="range" class="slider" min="10" max="16" step="0.5" data-attr-value="chatSize" data-event-change="tokenDial(4)"/>
+				<div class="cfg-value">{{chatSize | format(1)}}</div>
+			</div>
+			<div class="cfg-row">
+				<div class="cfg-label">Letter spacing</div>
+				<input type="range" class="slider" min="0" max="1.5" step="0.05" data-attr-value="chatTracking" data-event-change="tokenDial(5)"/>
+				<div class="cfg-value">{{chatTracking | format(2)}}</div>
+			</div>
+			<div class="cfg-row">
+				<div class="cfg-label">Weight</div>
+				<input type="range" class="slider" min="400" max="600" step="100" data-attr-value="chatWeight" data-event-change="tokenDial(6)"/>
+				<div class="cfg-value">{{chatWeight | format(0)}}</div>
+			</div>
+			<div class="segmented">
+				<div class="btn small" data-event-click="tokenSave()">Save text</div>
+				<div class="btn small" data-event-click="tokenRevert()">Revert</div>
+			</div>
+		</div>
+
+		<div class="cfg-page keep-scroll theme-page" id="cfg-page-theme" data-if="tab == 'theme'">
+			<div class="te-bar">
+				<div class="te-name">{{themeName}}</div>
+				<div class="btn small" data-class-on="themeEdits &gt; 0" data-event-click="tokenSave()">Save<span class="te-unsaved" data-if="themeEdits &gt; 0"> {{themeEdits}}</span></div>
+				<div class="btn small" data-event-click="tokenRevert()">Revert</div>
+			</div>
+			<div class="te-note" data-if="themeMessage != ''">{{themeMessage}}</div>
+			<!-- a pick per role shows its family; an open one lists the choices -->
+			<div class="segmented font-roles">
+				<div class="pick font-role" data-class-on="fontRole == 'body'" data-event-click="fontPicker('body')"><div class="font-role-name">Body</div><div class="font-current">{{fontBody}}</div></div>
+				<div class="pick font-role" data-class-on="fontRole == 'title'" data-event-click="fontPicker('title')"><div class="font-role-name">Titles</div><div class="font-current">{{fontTitle}}</div></div>
+				<div class="pick font-role" data-class-on="fontRole == 'numbers'" data-event-click="fontPicker('numbers')"><div class="font-role-name">Numbers</div><div class="font-current">{{fontNumbers}}</div></div>
+				<div class="pick font-role" data-class-on="fontRole == 'nameplate'" data-event-click="fontPicker('nameplate')"><div class="font-role-name">Names</div><div class="font-current">{{fontNameplate}}</div></div>
+			</div>
+			<div class="font-list" data-if="fontRole != ''">
+				<div class="font-choice" data-for="f : fontChoices" data-class-on="f.family == (fontRole == 'title' ? fontTitle : fontRole == 'numbers' ? fontNumbers : fontRole == 'nameplate' ? fontNameplate : fontBody)" data-event-click="font(fontRole, f.family)">
+					<div class="font-name"><span>{{f.family}}</span><span class="chip" data-if="f.aligned">aligned digits</span><span class="chip" data-if="f.system">Windows</span></div>
+					<div class="font-sample" data-style-font-family="f.family" data-style-font-weight="f.weight">Kitron Macaron ×12 — ◇♪ 1234567890</div>
+				</div>
+			</div>
+
+		</div>
+
+		<!-- layout -->
+		<div class="cfg-page keep-scroll" id="cfg-page-layout" data-if="tab == 'layout'">
+			<div class="cfg-section">Move and scale</div>
+			<div class="cfg-row">
+				<div class="cfg-label">Edit mode<div class="cfg-sub">Drag panels, scale from the corner. Esc saves and leaves.</div></div>
+				<div class="btn" data-class-on="settings.editing" data-event-click="edit()">Edit layout</div>
+			</div>
+			<div class="cfg-section">Reset</div>
+			<div class="cfg-row">
+				<div class="cfg-label">Every panel<div class="cfg-sub">Back to the native windows' positions.</div></div>
+				<div class="btn" data-if="confirm != 'all'" data-event-click="confirm = 'all'">Reset all</div>
+				<div class="btn danger" data-if="confirm == 'all'" data-event-click="layout('all')">Confirm</div>
+			</div>
+			<div class="cfg-window" data-for="w : settings.windows" data-if="w.open">
+				<div class="cfg-label">{{w.name}}<div class="cfg-sub">{{w.id}}</div></div>
+				<div class="btn small" data-if="confirm != w.id" data-event-click="confirm = w.id">Reset</div>
+				<div class="btn small danger" data-if="confirm == w.id" data-event-click="layout(w.id)">Confirm</div>
+			</div>
+		</div>
+
+		<!-- diagnostics -->
+		<div class="cfg-page keep-scroll" id="cfg-page-info" data-if="tab == 'info'">
+			<div class="cfg-section">Live</div>
+			<div class="cfg-stat">{{settings.frame}}</div>
+			<div class="cfg-stat">{{settings.memory}}</div>
+			<div class="cfg-stat">{{settings.plates}}</div>
+			<div class="cfg-section">Tools</div>
+			<div class="cfg-buttons">
+				<div class="btn" data-event-click="shot()">Screenshot</div>
+				<div class="btn" data-event-click="reload()">Reload theme</div>
+				<div class="btn" data-event-click="debug()">Debugger</div>
+			</div>
+			<div class="cfg-section">Dumps</div>
+			<div class="cfg-hint">Draw lists for new templates, written to logs\xirml_dumps.</div>
+			<div class="cfg-buttons">
+				<div class="btn" data-event-click="dump('orphans')">Orphan draws</div>
+			</div>
+			<div class="cfg-window" data-for="w : settings.windows" data-if="w.open">
+				<div class="cfg-label">{{w.name}}<div class="cfg-sub">{{w.id}}</div></div>
+				<div class="btn small" data-event-click="dump(w.id)">Dump</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+</body>
+</rml>

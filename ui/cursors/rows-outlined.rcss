@@ -1,0 +1,2 @@
+/* rows = outlined: a faint gold outline around each menu row */
+.screen-slot.action { margin: 1dp 0; border-radius: 3dp; box-shadow: var(--gold)38 0 0 0 1dp inset; }

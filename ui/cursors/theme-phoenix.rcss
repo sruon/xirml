@@ -1,0 +1,8 @@
+/* phoenix's own highlight (cursor = theme): a red edge on the left that fades into the row */
+.cursor {
+	border-radius: 0;
+	decorator: linear-gradient(90deg, var(--cursor-fill), var(--royal)14 55%, var(--cursor-fill-end));
+	box-shadow: none;
+}
+.cursor-bar { left: 0; top: 2dp; bottom: 2dp; width: 2dp; border-radius: 0; background-color: var(--royal); box-shadow: var(--royal)99 0 0 6dp 0; }
+.cell-cursor { box-shadow: var(--royal) 0 0 0 1dp inset, var(--royal)66 0 0 6dp 0; }

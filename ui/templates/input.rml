@@ -1,0 +1,17 @@
+<rml>
+<head>
+<title>xirml chat input</title>
+<link type="text/template" href="xirml:theme"/>
+<style>
+/* the chat input line over the native one; text, phrases and caret come from the client's buffer each frame */
+body { width: 100%; height: 100%; }
+</style>
+</head>
+<body data-model="input">
+<div class="shell" id="shell" data-if="open">
+<div class="chat-glass input" id="panel">
+	<div class="input-line"><span class="input-mode" data-if="mode != ''">{{mode}}</span><span data-for="s : before" data-class-phrase="s.phrase">{{s.text}}</span><div class="caret" data-class-off="!caretOn"/><span data-for="s : after" data-class-phrase="s.phrase">{{s.text}}</span></div>
+</div>
+</div>
+</body>
+</rml>

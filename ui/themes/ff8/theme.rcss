@@ -1,0 +1,125 @@
+/*
+ ff8: Final Fantasy VIII's menus, redrawn (reference: gameuidatabase.com, game 1896). Brushed grey windows, dark on the
+ left, with a square bevel, light grey text with a hard shadow, small grey capitals for titles, blue-violet gauges in a
+ silver frame, and the white glove.
+ Colours were picked from screenshots. The frame and glove are drawn by xirml.
+ Builds on ff7 and keeps its fonts, sizes, motion and glove. This file changes the colours, components.rcss the window and gauges.
+*/
+
+body {
+	/* text */
+	--ink: #e6e4e5;
+	--ink-soft: #d8d6d9;
+	--ink-body: #cfcdd0;
+	--value-ink: #ffffff;
+	--ink-dim: #acaaad;       /* small window titles */
+	--ink-disabled: #7f7d80;  /* choices that aren't selected */
+	--white: #ffffff;
+	--text-shadow: #1c1c1ee6;
+
+	/* accents: besides grey, the original only uses the gauges' blue-violet and the level star's yellow */
+	--gold: #bcbbff;
+	--gold-hi: #e4e3ff;
+	--gold-deep: #696ad6;
+	--gold-warm: #fbfd6e;
+	--title: #e6e4e5;
+	--teal: #9ce8c8;
+	--red: #ff9a9a;
+	--red-deep: #b8404a;
+	--green: #a8e8b0;
+	--blue: #a8c8ff;
+	--violet: #c8b8ff;
+
+	/* window: brushed grey, dark on the left, and the bevel */
+	--ff8-left: #404040f8;
+	--ff8-mid: #636164f8;
+	--ff8-right: #524e50f8;
+	--ff8-bevel-outer: #282828;
+	--ff8-bevel-light: #848285;
+	--ff8-bevel-dark: #383838;
+	--ff8-label: #acaaad;
+	--glass-top: var(--ff8-mid);
+	--glass-bottom: var(--ff8-left);
+	--glass-border: var(--ff8-bevel-light);
+	--glass-shadow: var(--ff8-bevel-outer) 0 0 0 1dp, #000000a0 0 3dp 8dp 0;
+	/* ff7's components read these bevel tokens (rules, cards, scrollbars, knobs), so set them in grey */
+	--ff7-top-left: var(--ff8-mid);
+	--ff7-bottom-left: var(--ff8-mid);
+	--ff7-shade: #00000030;
+	--ff7-bevel-outer: var(--ff8-bevel-outer);
+	--ff7-bevel-light: var(--ff8-bevel-light);
+	--ff7-bevel-top: #9a989b;
+	--ff7-bevel-dark: var(--ff8-bevel-dark);
+
+	/* shape: square corners, like the original */
+	--radius-panel: 0dp;
+	--radius-card: 0dp;
+	--radius-row: 0dp;
+	--radius-key: 1dp;
+
+	/* controls */
+	--control-off: #00000050;
+	--control-hover: #ffffff14;
+	--control-on: #696ad6;
+	--control-line: #84828580;
+
+	/* gauges: blue-violet tube lit along the middle, in a dark track with a silver frame */
+	--hp-start: #696ad6;
+	--hp-end: #a2a1fe;
+	--mp-start: #4a9a78;
+	--mp-end: #a8f0cc;
+	--tp-start: #b8a030;
+	--tp-end: #fbfd6e;
+	--low-start: #b85a3a;
+	--low-end: #ffb08a;
+	--gauge-track: #272926;
+	--gauge-trail: #ffffff70;
+	--gauge-height: 4dp;
+	--ff8-gauge-frame: #c4c2c5;
+
+	/* job roles, rarity and target names: soft tints that sit on grey */
+	--role-tank: #a8c8ff;
+	--role-healer: #a8e8b0;
+	--role-support: #c8b8ff;
+	--role-dps: #ffb0a0;
+	--item-usable: #fbfd6e;
+	--rare: #fbfd6e;
+	--ex: #c8b8ff;
+	--target-mob: #fbfd9a;
+	--target-pc: #ffffff;
+	--target-npc: #b4f0c8;
+	--claim-party: #ff9a9a;
+	--claim-other: #c8b8ff;
+	--buff-edge: #848285cc;
+	--debuff-edge: #ff9a9acc;
+
+	/* chat log and input: the same grey, lighter so you can see the game through it */
+	--chat-glass-top: #585658a8;
+	--chat-glass-bottom: #2c2c2cc8;
+	--chat-glass-border: #848285a0;
+	--chat-time: #acaaadc0;
+	--chat-phrase-ink: #bcbbff;
+	--chat-tab: #acaaad;
+	--chat-tab-bg: #303030e0;
+	--chat-tab-divider: #84828559;
+	--chat-tab-active: #ffffff;
+	--chat-tab-active-bg: #636164f0;
+	--chat-scroll-track: #00000059;
+	--chat-scroll-thumb: #c4c2c5cc;
+	--input-glass: #3a3a3aec;
+	--caret: #ffffff;
+
+	/* compass: a grey disc with the bevel's ring */
+	--compass-face: #404040d0;
+	--compass-face-centre: #636164d0;
+	--compass-ring: var(--ff8-bevel-light);
+	--compass-tick: #acaaadb3;
+	--compass-letter: #e6e4e5;
+	--compass-north: #ff9a9a;
+	--compass-glow: #00000080;
+	--compass-clock-bg: #404040e6;
+	--compass-clock-border: var(--ff8-bevel-light);
+	--compass-cross: #acaaad40;
+	--compass-moon-dark: #202020;
+	--compass-label: #bcbbff;
+}

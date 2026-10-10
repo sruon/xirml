@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "name": "Modern",
+  "description": "Dark glass with gold accents.",
+  "order": 30,
+  "bundled": true,
+  "preview": { "top": "#1c1e27", "bottom": "#0d0f15", "rule": "#c9b26c" },
+  "capabilities": { "windowStyleArt": false }
+}

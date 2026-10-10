@@ -1,0 +1,25 @@
+<rml>
+<head>
+<title>xirml compass dial</title>
+<link type="text/template" href="xirml:theme"/>
+<style>
+/* layout only. Rendered once, flat and north-up; the plugin lays it on the client's tilted, turned disc (its N and E letters give the axes).
+   Letters, entity dots and markers are separate upright sprites (compass_marks.rml), so they stay readable. */
+body { width: 100%; height: 100%; }
+.t-n { left: 50%; top: 5dp; width: 1.5dp; height: 7dp; margin-left: -0.75dp; }
+.t-s { left: 50%; bottom: 5dp; width: 1.5dp; height: 7dp; margin-left: -0.75dp; }
+.t-w { top: 50%; left: 5dp; height: 1.5dp; width: 7dp; margin-top: -0.75dp; }
+.t-e { top: 50%; right: 5dp; height: 1.5dp; width: 7dp; margin-top: -0.75dp; }
+.c-h { top: 50%; left: 18dp; right: 18dp; height: 1dp; margin-top: -0.5dp; }
+.c-v { left: 50%; top: 18dp; bottom: 18dp; width: 1dp; margin-left: -0.5dp; }
+</style>
+</head>
+<body data-model="sheet">
+<div class="compass-dial">
+	<div class="compass-ring-inner"/>
+	<div class="compass-cross c-h"/><div class="compass-cross c-v"/>
+	<div class="compass-tick north t-n"/><div class="compass-tick t-s"/><div class="compass-tick t-w"/><div class="compass-tick t-e"/>
+	<div class="compass-hub"/>
+</div>
+</body>
+</rml>

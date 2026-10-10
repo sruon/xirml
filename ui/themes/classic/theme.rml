@@ -1,0 +1,13 @@
+<template name="theme">
+<head>
+<link type="text/rcss" href="../../base/theme.rcss"/>
+<link type="text/rcss" href="theme.rcss"/>
+<link type="text/rcss" href="../../base/components.rcss"/>
+<link type="text/rcss" href="../../base/frame.rcss"/>
+<link type="text/rcss" href="components.rcss"/>
+<link type="text/rcss" href="xirml:highlight/theme-frame.rcss"/>
+<link type="text/rcss" href="xirml:pointer"/>
+<link type="text/rcss" href="xirml:rows"/>
+</head>
+<body></body>
+</template>

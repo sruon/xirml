@@ -1,0 +1,2 @@
+/* cursor = bar: the default gold highlight with its left bar, in any theme */
+.cursor-bar { display: block; }

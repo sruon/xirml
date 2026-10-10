@@ -1,0 +1,98 @@
+# Renders docs/gallery (every theme's main panels, tools/gallery.py) whenever ui/ or data/ change, and commits the result
+# to the branch: on main, and on a pull request from this repository, so the PR's diff shows the panels before and after.
+# A pull request from a fork gets the gallery as a workflow artifact instead.
+# The previewer is built from xirml-core, which needs the secret CORE_TOKEN (contents read on sruon/xirml-core) while
+# that repository is private. The scenes sit on flat grey: the runner has no game install and no backdrop.
+name: gallery
+
+on:
+  push:
+    branches: [main]
+    paths: ['ui/**', 'data/**', 'tools/gallery.py', 'tools/theme-editor/server.py', '.github/workflows/gallery.yml']
+  pull_request:
+    paths: ['ui/**', 'data/**', 'tools/gallery.py', 'tools/theme-editor/server.py', '.github/workflows/gallery.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gallery-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gallery:
+    runs-on: windows-latest
+    env:
+      CPM_SOURCE_CACHE: ${{ github.workspace }}/cpm-cache
+      CORE_TOKEN: ${{ secrets.CORE_TOKEN }}
+      # a pull request from this repository: the gallery is committed to its branch
+      OWN_BRANCH: ${{ (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && 'yes' || '' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: xirml-themes
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && github.head_ref || '' }}
+
+      - name: CORE_TOKEN
+        if: env.CORE_TOKEN == ''
+        run: |
+          echo "::error::the secret CORE_TOKEN is not set; it needs contents read on sruon/xirml-core"
+          exit 1
+
+      - uses: actions/checkout@v4
+        with:
+          repository: sruon/xirml-core
+          token: ${{ secrets.CORE_TOKEN }}
+          path: xirml-core
+
+      - name: Ashita SDK
+        shell: pwsh
+        run: |
+          $tag = gh api repos/AshitaXI/Ashita-v4beta/releases/latest --jq .tag_name
+          git clone -q --filter=blob:none --no-checkout https://github.com/AshitaXI/Ashita-v4beta.git ashita
+          git -C ashita sparse-checkout set plugins/sdk
+          git -C ashita checkout -q $tag
+          "ASHITA4_SDK_PATH=${{ github.workspace }}\ashita\plugins\sdk" >> $env:GITHUB_ENV
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - uses: actions/cache@v4
+        with:
+          path: cpm-cache
+          key: cpm-${{ hashFiles('xirml-core/cmake/*.cmake', 'xirml-core/patches/**') }}
+
+      - name: Ninja and Pillow
+        run: |
+          choco install ninja -y --no-progress
+          pip install pillow
+
+      - name: Previewer
+        shell: cmd
+        run: xirml-core\build.bat --target xirml_preview
+
+      - name: Render
+        shell: pwsh
+        run: python xirml-themes/tools/gallery.py --preview xirml-core/build-x86/xirml_preview.exe
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: gallery-${{ github.sha }}
+          path: xirml-themes/docs/gallery
+          if-no-files-found: error
+
+      - name: Commit
+        if: env.OWN_BRANCH
+        shell: pwsh
+        working-directory: xirml-themes
+        run: |
+          git add docs/gallery
+          git diff --cached --quiet
+          if ($LASTEXITCODE -eq 0) { "gallery unchanged"; exit 0 }
+          git -c user.name=github-actions[bot] -c user.email=41898282+github-actions[bot]@users.noreply.github.com commit -q -m "gallery: render ${{ github.sha }}"
+          # the branch may have moved during the render: put the renders on top of it (only docs/gallery is ours)
+          $branch = '${{ github.head_ref || github.ref_name }}'
+          git pull -q --rebase origin $branch
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          git push origin HEAD:$branch

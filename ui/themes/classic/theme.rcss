@@ -1,0 +1,55 @@
+/*
+ classic: the game's deep blue window style (style 5, ROM/0/19.DAT), redrawn at high resolution.
+ The navy cloud background is the game's own texture, tinted with --frame-top and --frame-bottom (#ffffff leaves it as is).
+ The lines, corner squares and hand are drawn by xirml, so they stay sharp at any size.
+ Anything not set here comes from ui/base/theme.rcss.
+*/
+
+body {
+	--cursor-pointer: hand;
+	--frame-rule: #8e8158;        /* olive-gold line along the top and bottom (the game's is about #736a4b) */
+	--frame-side: #8e815866;      /* the sides, fainter, as in the game */
+	--frame-top: #c4fbc4ff;       /* texture tint at the top (the game's active window uses 0x60,0x7f,0x60) */
+	--frame-bottom: #8a8a96ff;    /* and at the bottom (the game uses 0x40,0x40,0x40, this is a bit lighter) */
+	--frame-divider: var(--frame-rule)59;
+
+	--font-frame-title: Georgia;
+	--size-frame-title: 12.5dp;
+	--frame-title: #f6f2e8;
+	--frame-title-outline: #05070dd0;
+	--sheet-header-bare: 9dp;    /* a sheet without a title band: the title sits on the frame and the content starts at the top */
+	--frame-title-top: -6dp;      /* puts the middle of the title on the top line */
+
+	--cursor-hand: xiframe:hand;  /* ui/cursors/hand.png */
+	--cursor-hand-size: 16dp;
+	--cursor-hand-lift: -8dp;
+	--cursor-hand-left: 1dp;  /* keeps the hand inside the panel, or it would be clipped */
+	--cursor-fill: #8fb4ff1f;
+	--cursor-fill-end: #8fb4ff00;
+
+	/* cooler accents than modern's gold, closer to the game's highlights */
+	--ink-soft: #dfe3ea;
+	--ink-dim: #9ea8b8;
+	--gold: #e2c27e;
+	--title: #f6f2e8;
+	--chat-tab-active: #2a1808;
+	--chat-tab-active-bg: #e59a3a;
+
+	/* compass in the game's navy and olive-gold */
+	--compass-face: #0a1430c8;
+	--compass-ring: var(--frame-rule);
+	--compass-tick: var(--frame-rule)b3;
+	--compass-clock-bg: #0a1430d8;
+	--compass-clock-border: var(--frame-rule)80;
+	--compass-face-centre: #14214ad0;
+	--compass-cross: var(--frame-rule)40;
+	--compass-moon-dark: #0a1430;
+
+	/* usable items in the game's pale yellow, a little brighter on navy */
+	--item-usable: #f7e88c;
+
+	/* nameplates */
+	--plate-italic: 0.21;
+	--plate-outline: 4;
+	--plate-shadow: 3;
+}

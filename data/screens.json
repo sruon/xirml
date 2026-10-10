@@ -1,0 +1,204 @@
+{
+  "version": 1,
+  "_comment": "The client's windows the plugin knows by name. kind: which document kind draws it (inventory, party, buffs, target, equipment, chat, input, sheet, compass, strip, generic); template: the default file under ui/templates; name: what the settings panel calls it; group: its settings-panel group (hud, inventory, status; else menus). A window listed here with a kind gets its panel up front under replace = all; any other window needs a contract.",
+  "screens": {
+    "inventor": {
+      "kind": "inventory",
+      "template": "inventory.rml",
+      "name": "Inventory",
+      "group": "inventory"
+    },
+    "bank": {
+      "kind": "inventory",
+      "template": "inventory.rml",
+      "name": "Storage",
+      "group": "inventory"
+    },
+    "partywin": {
+      "kind": "party",
+      "template": "party.rml",
+      "name": "Party",
+      "group": "hud"
+    },
+    "buff": {
+      "kind": "buffs",
+      "template": "buffs.rml",
+      "name": "Status effects",
+      "group": "hud"
+    },
+    "targetwi": {
+      "kind": "target",
+      "template": "target.rml",
+      "name": "Target",
+      "group": "hud"
+    },
+    "equip": {
+      "kind": "equipment",
+      "template": "equipment.rml",
+      "name": "Equipment",
+      "group": "inventory"
+    },
+    "logwindo": {
+      "kind": "chat",
+      "template": "chat.rml",
+      "name": "Chat log"
+    },
+    "logwin2": {
+      "kind": "chat",
+      "template": "chat.rml"
+    },
+    "fulllog": {
+      "kind": "chat",
+      "template": "chat.rml"
+    },
+    "inline": {
+      "kind": "input",
+      "template": "input.rml",
+      "name": "Chat input"
+    },
+    "persona": {
+      "kind": "sheet",
+      "template": "sheet.rml",
+      "name": "Status",
+      "group": "status"
+    },
+    "profile": {
+      "kind": "generic",
+      "template": "contract.rml",
+      "name": "Profile",
+      "group": "status"
+    },
+    "joblevel": {
+      "kind": "sheet",
+      "template": "sheet.rml",
+      "name": "Job levels",
+      "group": "status"
+    },
+    "masterle": {
+      "kind": "sheet",
+      "template": "sheet.rml",
+      "name": "Master levels",
+      "group": "status"
+    },
+    "level": {
+      "kind": "sheet",
+      "template": "sheet.rml",
+      "name": "Mastery",
+      "group": "status"
+    },
+    "btlskill": {
+      "kind": "sheet",
+      "template": "sheet.rml",
+      "name": "Combat skills",
+      "group": "status"
+    },
+    "mgcskill": {
+      "kind": "sheet",
+      "template": "sheet.rml",
+      "name": "Magic skills",
+      "group": "status"
+    },
+    "trdskill": {
+      "kind": "generic",
+      "template": "contract.rml",
+      "name": "Craft skills",
+      "group": "status"
+    },
+    "inspect": {
+      "kind": "equipment",
+      "template": "equipment.rml",
+      "name": "Check",
+      "group": "status"
+    },
+    "casttime": {
+      "kind": "sheet",
+      "template": "sheet.rml",
+      "name": "Cast bar",
+      "group": "hud"
+    },
+    "gaugewin": {
+      "kind": "sheet",
+      "template": "sheet.rml",
+      "name": "Vitals",
+      "group": "hud"
+    },
+    "netstat": {
+      "kind": "sheet",
+      "template": "sheet.rml",
+      "name": "Network",
+      "group": "hud"
+    },
+    "compass": {
+      "kind": "compass",
+      "template": "compass.rml"
+    },
+    "helpwind": {
+      "kind": "strip",
+      "template": "strip.rml"
+    },
+    "titlewin": {
+      "kind": "strip",
+      "template": "strip.rml"
+    },
+    "menuwind": {
+      "name": "Main menu"
+    },
+    "subwindo": {
+      "name": "Info",
+      "group": "hud"
+    },
+    "socialme": {
+      "name": "Social menu"
+    },
+    "mogcont": {
+      "name": "Mog House"
+    },
+    "cmbmenu": {
+      "name": "Synthesis menu"
+    },
+    "abimenu": {
+      "name": "Abilities menu"
+    },
+    "playermo": {
+      "name": "Player menu"
+    },
+    "ability": {
+      "name": "Ability list"
+    },
+    "magic": {
+      "name": "Spell list"
+    },
+    "mount": {
+      "name": "Mounts"
+    },
+    "money": {
+      "name": "Gil"
+    },
+    "statcom2": {
+      "name": "Status menu",
+      "group": "status"
+    },
+    "shop": {
+      "name": "Shop",
+      "group": "inventory"
+    },
+    "configwi": {
+      "name": "Config"
+    },
+    "searchma": {
+      "name": "Search"
+    },
+    "region": {
+      "name": "Region info"
+    },
+    "prty1": {
+      "name": "Party menu"
+    },
+    "evitem": {
+      "name": "Currencies"
+    },
+    "merit1": {
+      "name": "Merit points"
+    }
+  }
+}

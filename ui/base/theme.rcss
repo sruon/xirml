@@ -1,0 +1,221 @@
+/*
+ The tokens every template and components.rcss use. Change a value here and every panel follows. `/xirml reload`
+ applies it without restarting.
+
+ They're CSS custom properties in one rule, body { --name: value; }, inherited by every element. A value can use
+ another token with var(--name), and var(--gold)99 adds alpha. A theme's theme.rcss loads after this file and redefines
+ only what it changes.
+
+ 1dp is one pixel of the game's menu. Panels render at the screen's scale (3x at 3456x1944, over a 1152x648 menu).
+*/
+
+body {
+	/* palette: text */
+	--ink: #f4efe4;        /* primary text, counts, key caps */
+	--ink-soft: #d8d2c5;   /* list rows that aren't highlighted */
+	--ink-body: #cfc9bc;   /* long text: descriptions */
+	--ink-dim: #a9a397;    /* secondary text: counters, hints, chips */
+	--ink-disabled: #6f6b63; /* entries the game greys out */
+	--white: #ffffff;      /* the selected row, card titles */
+
+	/* palette: accents */
+	--gold: #e8c98a;       /* the main accent: frames, glows, cursor */
+	--gold-hi: #fff1cf;    /* bright gold: cursor bar, meter tip, scroll thumb */
+	--gold-deep: #b08a4a;  /* dark end of gold gradients */
+	--gold-warm: #ffe1a0;  /* selected row text glow */
+	--value-ink: var(--gold-warm); /* numbers in label and value rows (currencies, points), set apart from the label */
+	--title: #f6dfa8;      /* panel titles */
+	--teal: #8fd9c9;       /* "usable" and other positive states */
+	--mission-current: var(--teal); /* the active mission, whether or not the cursor is on it */
+	--red: #ff9c7a;        /* full meters, warnings */
+	--red-deep: #a54a3a;
+	--green: #a8e0a0;      /* colours that the menu template maps the game's text colours to */
+	--blue: #9cc4ff;
+	--violet: #d0a8ff;
+	--net-good: #80ff80;   /* network bars by quality, in the game's green, yellow and red */
+	--net-fair: #ffff80;
+	--net-poor: #ff8080;
+	--net-unlit: #ffffff24; /* a signal bar above the current quality */
+	--status-online: #7fe08a;    /* online status (Online Stat., the friend list): online, away, invisible (a ring), offline */
+	--status-away: #f0c060;
+	--status-invisible: #b8b4aa;
+	--status-offline: #6f6b63;
+
+	/* glass */
+	--glass-top: #1c1e27fb;    /* dark enough that bright text in the game, like nameplates, doesn't show through */
+	--glass-bottom: #0b0c11fd;
+	--glass-border: #ffecbe29;
+	--glass-shadow: #0000008c 0 0 0 1dp, #0000008c 0 4dp 14dp 0, #ffffff12 0 1dp 0 0 inset, #00000059 0 0 24dp 0 inset;
+	--glass-tint: var(--gold)1a;  /* warm light from the top edge */
+	--glass-sheen: #ffffff09; /* diagonal sheen strength */
+	--glass-edge: var(--gold)38;  /* warm hairline along the top inner edge */
+
+	/* type */
+	--font-body: Noto Sans JP;
+	--font-title: Cinzel;
+	--font-numbers: Noto Sans JP; /* counts, values, levels, the clock */
+	--font-nameplate: Noto Sans JP; /* nameplates (the SemiBold face, drawn by the plugin) */
+	--font-icons: Xirml Icons; /* ui/fonts/XirmlIcons.ttf: gear slots, party roles, settings and key hint icons */
+	--weight-body: 500;    /* weights chosen by measuring the game's own text (see docs/fonts.md). Each font loads the face closest to each one */
+	--weight-strong: 600;  /* names, headings, the selected row */
+	--weight-numbers: 600; /* everything in --font-numbers */
+	--weight-chat: 600;    /* the chat log, heavier to match the game's bold bitmap font */
+	--weight-nameplate: 600; /* nameplates: the --font-nameplate face the plugin draws with */
+	--size-title: 11.5dp;
+	--size-heading: 14dp;
+	--size-body: 12dp;
+	--size-desc: 11dp;
+	--size-small: 10.5dp;
+	--size-tiny: 9.5dp;
+	--size-macro-key: 8.5dp;
+	--tracking-title: 2.5dp;
+
+	/* shape and space */
+	--radius-panel: 7dp;
+	--radius-card: 5dp;
+	--radius-row: 4dp;
+	--radius-key: 3dp;
+	--header-height: 28dp;  /* every panel's header */
+	--sheet-header-bare: 29dp; /* header and rule height for a titled sheet without a name (the plugin reads it to size the sheet) */
+	--pad: 12dp;
+	--gap: 8dp;
+	--menu-column-width: 156dp;
+	--window-width: 320dp;
+	--window-options-width: 380dp;
+	--window-description-width: 380dp;
+	--window-row-height: 20dp;
+	--sheet-width: 112dp; /* the game's own width for the status column, which sits next to the help line at the top */
+	--sheet-columns-width: 240dp;
+	--party-width: 202dp;  /* the party list and the target box above it */
+	--equipment-width: 254dp;
+
+	/* glows */
+	--glow-gold: var(--gold)99 0 0 6dp 0;
+	--glow-gold-strong: var(--gold) 0 0 6dp 0, var(--gold)99 0 0 12dp 0;
+	--glow-text: glow(0dp 3dp 0dp 0dp var(--gold)55);
+	--glow-selected: glow(0dp 4dp 0dp 0dp var(--gold-warm)5a);
+
+	/* motion: durations and the easing every transition uses */
+	--ease: cubic-out;
+	--ease-linear: linear-in-out; /* hover and cursor slides */
+	--motion-hover: 0.12s;
+	--motion-cursor: 0.08s; /* how fast the list cursor glides (the selected row's text changes immediately) */
+	--motion-thumb: 0.12s;
+	--motion-meter: 0.3s;
+	--motion-fade: 0.15s;
+	--motion-open: 0.22s;  /* panel open animation, also read by the plugin */
+	--motion-scroll: 0.16s;
+	--motion-swap: 0.14s;
+
+	/* controls: the settings panel's toggles, segmented choices, buttons and slider */
+	--control-off: #ffffff0f;
+	--control-hover: #ffffff1c;
+	--control-on: var(--gold)40;
+	--control-line: #ffffff1f;
+	--cursor-pointer: none; /* the default pointer, unless a theme sets one */
+
+	/* gauges: party HP/MP/TP bars */
+	--hp-start: #3f9a6a;
+	--hp-end: #b5f0a8;
+	--mp-start: #3d63b8;
+	--mp-end: #a8c8ff;
+	--tp-start: var(--gold-deep);
+	--tp-end: var(--gold-hi);
+	--low-start: var(--red-deep);  /* HP under 25% */
+	--low-end: var(--red);
+	--gauge-track: #ffffff14;
+	--gauge-trail: #ffffff59; /* the trail of lost HP that catches up after a hit */
+	--gauge-height: 3dp;
+	--motion-gauge: 0.25s;
+	--motion-trail: 0.6s;
+	--delay-trail: 0.35s;
+
+	/* icon cells: buffs and equipment */
+	--buff-size: 20dp;
+	--cell-gap: 4dp;       /* equipment grid spacing, read by the plugin together with --cell-size */
+	--cell-size: 40dp;      /* read by the plugin to place the equipment cursor */
+	--count-width: 30dp;    /* right-aligned number columns */
+
+	/* job roles: party badges */
+	--role-tank: #8ab8ff;
+	--role-healer: #93e3a6;
+	--role-support: #d2b0ff;
+	--role-dps: #ff9f8c;
+	--role-icons: none; /* the role icon before each party job: set to inline-block to show it */
+
+	/* item rarity: names, pills and cell outlines */
+	--item-usable: #f1d66e; /* usable items, the game's yellow on dark glass */
+	--rare: #ffd88a;
+	--ex: #c7a6ff;
+
+	/* target names in the game's colours (yellow unclaimed, red yours, purple someone else's), softened */
+	--target-mob: #ffe2a0;
+	--target-pc: #cfe4ff;
+	--target-npc: #b4ecc4;
+	--claim-party: var(--red);
+	--claim-other: #d2a6ff;
+
+	/* buff tiles: effects you can cancel, and ones you can't */
+	--buff-edge: var(--teal)59;
+	--debuff-edge: var(--red)8c;
+
+	/* chat log and input: lighter glass than the menus, so the log covers no more of the game than the original */
+	--chat-glass-top: #10121acc;
+	--chat-glass-bottom: #08090ddd;
+	--chat-glass-border: #ffecbe1f;
+	--chat-size: 13.5dp;      /* chat text: as large as the game's 16 px line spacing allows */
+	--chat-pitch: 16dp;       /* line spacing: the game's 16 menu px. Raise it if you use a larger --chat-size */
+	--chat-time: var(--ink-dim)b3; /* the [hh:mm:ss] prefix from a timestamp addon */
+	--chat-phrase-ink: var(--teal);  /* auto-translate phrases */
+	--chat-tracking: 0.5dp;    /* chat letter spacing: the game's font spaces its letters widely */
+	--chat-tab: var(--ink-dim);       /* the log's tab bar */
+	--chat-tab-bg: #0b0d14d0;
+	--chat-tab-divider: #ffffff14;
+	--chat-tab-active: var(--gold-hi); /* the tab the game highlights */
+	--chat-tab-active-bg: #1a1710f0;
+	--chat-scroll-track: #ffffff10;
+	--chat-scroll-thumb: var(--gold)99;
+	--input-glass: #0b0c11e6;
+	--caret: var(--gold-hi);
+	--motion-caret: 0.53s;    /* caret blink, half the period, read by the plugin (0 turns blinking off) */
+
+	/* compass: the dial and its clock line (compass.rml, compass_dial.rml) */
+	--compass-face: #0b0d14b8;   /* the disc */
+	--compass-ring: var(--gold)b3;   /* its outer ring and ticks */
+	--compass-tick: var(--ink-dim)99;
+	--compass-letter: var(--ink);
+	--compass-north: var(--red);       /* N in its own colour */
+	--compass-glow: var(--gold)40;
+	--compass-clock-bg: var(--chat-glass-top);
+	--compass-clock-border: var(--chat-glass-border);
+	--compass-face-centre: #161a26c8;
+	--compass-cross: var(--ink-dim)40;
+	--compass-moon-lit: #f2ead2;
+	--compass-moon-dark: #20242e;
+	--compass-label: var(--gold-hi);
+	/* Vana'diel days, in the game's order, Firesday to Darksday */
+	--day-0: #ff8a6a;
+	--day-1: #e0c070;
+	--day-2: #7ab8ff;
+	--day-3: #8fe0a0;
+	--day-4: #b8e6ff;
+	--day-5: #d8a0ff;
+	--day-6: #fff4d0;
+	--day-7: #8a7aa8;
+
+	/* cursor (settings: cursor = theme, bar, subtle or game, cursor_pointer = none, hand or arrow). Classic sets its own hand and fill */
+	--cursor-hand: xiframe:hand;
+	--cursor-hand-size: 16dp;
+	--cursor-hand-lift: -8dp;
+	--cursor-hand-left: 1dp;
+	--cursor-fill: var(--gold)24;
+	--cursor-fill-end: var(--gold)00;
+	--cursor-soft: #ffffff14;
+	--cursor-soft-end: #ffffff00;
+
+	/* nameplates */
+	--plate-italic: 0;
+	--plate-outline: 3;
+	--plate-shadow: 0;
+	--plate-offset-y: 0;
+}

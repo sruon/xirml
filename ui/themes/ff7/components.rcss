@@ -1,0 +1,72 @@
+/* ff7: bevelled blue windows, white text with a drop shadow, cyan labels, tube gauges. Loads after components.rcss */
+
+body { font-effect: shadow(1dp 1dp var(--text-shadow)); }
+
+/* the window: blue fading top to bottom and darker to the right, with a grey outer line, a light line (brighter on top) and a dark inner line */
+.glass, .chat-glass {
+	border-radius: var(--radius-panel);
+	border: var(--ff7-bevel) var(--ff7-bevel-light);
+	border-top-color: var(--ff7-bevel-top);
+	decorator: linear-gradient(180deg, var(--glass-top), var(--glass-bottom)), linear-gradient(90deg, #00000000, var(--ff7-shade));
+	box-shadow: var(--glass-shadow);
+}
+.chat-glass { decorator: linear-gradient(180deg, var(--chat-glass-top), var(--chat-glass-bottom)), linear-gradient(90deg, #00000000, var(--ff7-shade)); border-color: var(--chat-glass-border); box-shadow: var(--ff7-bevel-outer) 0 0 0 1dp, var(--ff7-bevel-dark) 0 0 0 1dp inset; }
+.chat-glass.input { decorator: linear-gradient(180deg, var(--input-glass), var(--chat-glass-bottom)); }
+.sheen, .sigil { display: none; }
+
+/* titles in the menu font, white, normal case */
+.panel-title, .glass .band.head .seg, .strip.title .strip-text {
+	font-family: var(--font-title); font-weight: bold; font-size: var(--size-title); letter-spacing: var(--tracking-title); text-transform: none;
+	color: var(--title);
+	font-effect: shadow(1dp 1dp var(--text-shadow));
+}
+
+/* a rule splits the window: a light line over a dark one, edge to edge */
+.rule, .glass .band-rule {
+	height: 2dp; margin: 0;
+	decorator: linear-gradient(180deg, var(--ff7-bevel-light) 0%, var(--ff7-bevel-light) 50%, var(--ff7-bevel-dark) 50%, var(--ff7-bevel-dark) 100%);
+}
+.glass .band-rule { left: 0; right: 0; }
+
+/* cyan labels, white values */
+.sheet-label, .stat-label { color: var(--gold); }
+.sheet-row.selected .sheet-label { color: var(--white); }
+
+/* item cards and editor cards are small windows inside the window */
+.card, .te-card {
+	border-radius: var(--radius-card);
+	decorator: linear-gradient(180deg, #ffffff0a, #00000038);
+	box-shadow: var(--ff7-bevel-light) 0 0 0 1dp, var(--ff7-bevel-dark) 0 0 0 1dp inset;
+}
+.big { decorator: radial-gradient(circle at 50% 30%, #ffffff1f, #00000066); box-shadow: var(--ff7-bevel-light) 0 0 0 1dp inset; }
+
+/* gauges: a dark tube in a grey frame, lit along the middle */
+.gauge, .meter {
+	border-radius: 0;
+	background-color: var(--gauge-track);
+	box-shadow: var(--ff7-bevel-outer) 0 0 0 1dp;
+}
+.gauge-gloss { top: 20%; bottom: 45%; background-color: #ffffff60; }
+.meter-fill { box-shadow: none; }
+
+/* scrollbars: a grey bevelled thumb in a dark track */
+.rail, .chat-scroll { border-radius: 0; background-color: #00000066; box-shadow: var(--ff7-bevel-outer) 0 0 0 1dp inset; }
+.thumb, .chat-thumb { border-radius: 0; decorator: linear-gradient(90deg, var(--ff7-bevel-top), #8e8c94); box-shadow: none; }
+scrollbarvertical sliderbar { border-radius: 0; background-color: var(--ff7-bevel-light); }
+
+/* party: the selected member highlighted like a menu row, the target marked with a white bar */
+.member.selected { decorator: linear-gradient(90deg, var(--cursor-fill), var(--cursor-fill-end)); box-shadow: none; }
+.pointer { box-shadow: none; background-color: var(--white); }
+
+/* icon cells: dark wells with a grey frame */
+.buff { box-shadow: var(--buff-edge) 0 0 0 1dp inset, #000000a6 0 1dp 2dp 0; }
+.buff.debuff { box-shadow: var(--debuff-edge) 0 0 0 1dp inset, #000000a6 0 1dp 2dp 0; }
+.cell-cursor { box-shadow: var(--white) 0 0 0 1dp inset, var(--ff7-bevel-dark) 0 0 0 2dp inset; }
+
+/* settings controls: grey bevelled knobs, the selected choice in a brighter blue */
+.toggle .knob, input.slider sliderbar { background-color: var(--ff7-bevel-light); box-shadow: var(--ff7-bevel-dark) 0 0 0 1dp; }
+.toggle.on .knob { background-color: var(--white); }
+.btn, .segmented, .te-input { box-shadow: var(--control-line) 0 0 0 1dp inset; }
+
+/* chat: the active tab in a lighter blue */
+.chat-tab.active { border-bottom: 0; border-radius: 2dp 2dp 0 0; }

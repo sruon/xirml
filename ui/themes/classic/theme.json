@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "name": "Classic",
+  "description": "The game's deep blue windows, redrawn sharp.",
+  "order": 10,
+  "bundled": true,
+  "preview": { "top": "#1d3a6e", "bottom": "#0a1530", "rule": "#8e8158" },
+  "capabilities": { "windowStyleArt": true }
+}

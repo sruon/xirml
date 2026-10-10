@@ -1,0 +1,29 @@
+<rml>
+<head>
+<title>xirml target</title>
+<link type="text/template" href="xirml:theme"/>
+<style>
+/* layout only. RmlUi owns the size: the host measures #panel (one row, two while a sub-target is being chosen), and the plugin keeps
+   the bottom-right corner on the native box's. */
+body { width: 100%; height: 100%; }
+.glass { display: block; width: var(--party-width); height: auto; right: auto; bottom: auto; padding: 6dp 9dp 6dp 9dp; }
+</style>
+</head>
+<body data-model="target">
+<div class="shell" id="shell">
+<div class="glass" id="panel" fit-content>
+	<div class="sheen"/>
+	<div data-for="t : members" data-attr-class="'target ' + t.kind + ' claim-' + t.claim + (t.subtarget ? ' sub' : '') + ((t.hpPercent | low_hp(t.away)) ? ' low' : '')">
+		<div class="target-head">
+			<div class="target-name">{{t.subtarget ? '» ' : ''}}{{t.name}}</div>
+			<div class="target-distance" data-if="t.distance >= 0">{{t.distance | format(1)}}</div>
+		</div>
+		<div class="target-vital">
+			<div class="gauge hp"><div class="gauge-trail" data-style-transform="'scaleX(' + t.hpPercent / 100 + ')'"/><div class="gauge-fill" data-style-transform="'scaleX(' + t.hpPercent / 100 + ')'"/><div class="gauge-gloss"/></div>
+			<div class="target-hpp">{{t.hpPercent}}%</div>
+		</div>
+	</div>
+</div>
+</div>
+</body>
+</rml>

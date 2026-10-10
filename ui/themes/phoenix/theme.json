@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "name": "Phoenix",
+  "description": "Classic's framing in ember and royal red, after phoenix-xi.com.",
+  "order": 50,
+  "bundled": true,
+  "preview": { "top": "#3a2525", "bottom": "#180e0e", "rule": "#c55151" },
+  "capabilities": { "windowStyleArt": false }
+}

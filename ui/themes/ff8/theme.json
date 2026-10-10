@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "name": "FF8",
+  "description": "Brushed grey windows with a bevel, after the 1999 menus.",
+  "extends": "ff7",
+  "order": 45,
+  "bundled": true,
+  "preview": { "top": "#636164", "bottom": "#404040", "rule": "#848285" },
+  "capabilities": { "windowStyleArt": false }
+}

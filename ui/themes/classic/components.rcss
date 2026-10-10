@@ -1,0 +1,4 @@
+/* the game's orange active chat tab, and the title font on the tabs */
+.chat-tab { font-family: var(--font-frame-title); font-style: italic; font-weight: bold; }
+.chat-tab.active { color: var(--chat-tab-active); background-color: var(--chat-tab-active-bg); border-bottom: 0; border-radius: 3dp 3dp 0 0; }
+.chat-label { font-family: var(--font-frame-title); font-style: italic; font-weight: bold; }

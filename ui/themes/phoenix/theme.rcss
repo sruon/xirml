@@ -1,0 +1,137 @@
+/*
+ phoenix: classic's framing in the colours of phoenix-xi.com. Dark red glass, a double frame line in the site's red and
+ peach, the title on the top line in Cormorant, and ember glows from the bottom and in the corners.
+ Colours come from the site's stylesheet and wallpaper. None of its images are used.
+ The frame is drawn with gradients and shadows in components.rcss, so it doesn't need any game art.
+*/
+
+body {
+	/* phoenix's own tokens, first because the ones below use them */
+	--royal: #c55151;        /* the site's --color-royal-red: frame line, active markers */
+	--peach: #d2abab;        /* the site's --color-peach-pink: inner frame line */
+	--frame-gap: #120909;    /* the dark gap between the two frame lines */
+	--title-outline: #1f1313;  /* breaks the top line around the title */
+
+	/* text (the site's --color-white-pink, --color-off-pink, --color-peach-pink, --color-text-quaternary) */
+	--ink: #fff8f8;
+	--ink-soft: #eae1e1;
+	--ink-body: #e2d5d3;
+	--value-ink: #ffbe8a;
+	--ink-dim: #d2abab;
+	--ink-disabled: #8a6b6b;
+	--white: #ffffff;
+
+	/* accents: the site's red for the frame, the wallpaper's ember for highlights */
+	--gold: #f2a66a;       /* amber: glows, meters, scroll thumb, section labels */
+	--gold-hi: #ffdcb8;    /* ember tip */
+	--gold-deep: #9c3434;  /* crimson, the dark end of ember gradients */
+	--gold-warm: #ffbe8a;
+	--title: #fff8f8;
+	--teal: #8fd9c0;
+	--red: #ff968c;
+	--red-deep: #9a2a2a;
+	--green: #b2e2a0;
+	--blue: #a8c4ff;
+	--violet: #dcaaff;
+
+	/* glass (the site's --color-surface-1 #291c1c over --color-background #180e0e) */
+	--glass-top: #2c1d1dfb;
+	--glass-bottom: #150b0bfd;
+	--glass-border: #d2abab40;
+	--glass-shadow: #000000a0 0 0 0 1dp, #0000008c 0 4dp 14dp 0, #00000066 0 0 24dp 0 inset;
+	--glass-tint: var(--gold)24;   /* ember light from the bottom edge */
+	--glass-sheen: #ffffff06;
+	--glass-edge: var(--royal)66;
+
+	/* type: Cormorant (the site uses Cormorant Upright) with Noto Sans */
+	--font-title: Cormorant Garamond;
+	--size-title: 13dp;
+	--tracking-title: 2dp;
+
+	/* shape: almost square, like the site's tiles */
+	--radius-panel: 2dp;
+	--radius-card: 2dp;
+	--radius-row: 2dp;
+	--radius-key: 2dp;
+	--sheet-header-bare: 9dp;  /* a sheet without a title band: the title sits on the frame like classic's */
+
+	/* glows */
+	--glow-gold: var(--gold)99 0 0 6dp 0;
+	--glow-gold-strong: var(--gold) 0 0 6dp 0, var(--royal)99 0 0 12dp 0;
+	--glow-text: glow(0dp 3dp 0dp 0dp var(--royal)66);
+	--glow-selected: glow(0dp 4dp 0dp 0dp var(--gold)5a);
+	--ember-corner: var(--gold)59; /* the glow in each corner */
+
+	/* motion: slightly slower than modern */
+	--motion-open: 0.26s;
+
+	/* controls */
+	--control-on: var(--royal)55;
+
+	/* gauges: TP goes from crimson to ember */
+	--hp-start: #3f9a6a;
+	--hp-end: #b5f0a8;
+	--tp-start: var(--gold-deep);
+	--tp-end: var(--gold-hi);
+	--gauge-track: #ffffff12;
+
+	/* job roles: the base colours, a little warmer for red glass */
+	--role-tank: #92bcff;
+	--role-healer: #98e6aa;
+	--role-support: #dcb4ff;
+	--role-dps: #ff9a86;
+
+	/* item rarity */
+	--item-usable: #f6d77c;
+	--rare: #ffd08a;
+	--ex: #d3acff;
+
+	/* target name */
+	--target-mob: #ffe2a0;
+	--target-pc: #d6e6ff;
+	--target-npc: #b8eec6;
+	--claim-other: #dcaaff;
+
+	/* nameplate HP bar: the base colours, with the lost part in dark red */
+
+	/* status framing */
+	--buff-edge: var(--teal)59;
+	--debuff-edge: var(--red)99;
+
+	/* chat: dark red glass, the active tab marked like the site's menu */
+	--chat-glass-top: #1c1010cc;
+	--chat-glass-bottom: #0e0707dd;
+	--chat-glass-border: #d2abab26;
+	--chat-time: var(--ink-dim);     /* timestamps at full dim ink, since anything fainter dropped below 4.5:1 contrast over the game */
+	--chat-tab: var(--ink-dim);
+	--chat-tab-bg: #140a0ad0;
+	--chat-tab-divider: #d2abab1a;
+	--chat-tab-active: var(--ink);
+	--chat-tab-active-bg: #3a1c1cf0;
+	--chat-scroll-track: #d2abab14;
+	--chat-scroll-thumb: var(--royal)cc;
+	--input-glass: #140a0ae6;
+	--caret: var(--gold-hi);
+
+	/* compass */
+	--compass-face: #180e0eb8;
+	--compass-ring: var(--royal)cc;
+	--compass-tick: var(--ink-dim)99;
+	--compass-north: #ff9a76;
+	--compass-glow: var(--gold)40;
+	--compass-clock-bg: var(--chat-glass-top);
+	--compass-clock-border: var(--chat-glass-border);
+	--compass-face-centre: #2a1818c8;
+	--compass-cross: var(--ink-dim)40;
+	--compass-moon-dark: #241414;
+	--compass-label: var(--gold-hi);
+
+	/* cursor: the theme's own highlight is the site's menu marker turned on its side (components.rcss) */
+	--cursor-fill: var(--royal)40;
+	--cursor-fill-end: var(--royal)00;
+
+	/* nameplates */
+	--plate-italic: 0.21;
+	--plate-outline: 4;
+	--plate-shadow: 3;
+}

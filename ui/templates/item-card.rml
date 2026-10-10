@@ -1,0 +1,10 @@
+<template name="item-card" content="item-chips"><head></head><body>
+<div class="big"><img data-if="itemIcon != ''" data-attr-src="itemIcon"/></div>
+<div>
+    <div class="card-title" data-class-usable="itemUsable" data-class-rare="item.rare &amp;&amp; !item.exclusive" data-class-ex="item.exclusive">{{itemName}}</div>
+    <div class="chips" id="item-chips">
+        <div class="chip gold" data-if="itemType != ''">{{itemType}}</div>
+        <div class="chip" data-if="item.level > 0">Lv. {{item.level}}</div>
+    </div>
+</div>
+</body></template>

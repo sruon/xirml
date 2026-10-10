@@ -1,0 +1,19 @@
+<rml>
+<head>
+<title>xirml strip</title>
+<link type="text/template" href="xirml:theme"/>
+<style>
+/* layout only. The help line (title "help") and the title box (title "title") over their native rects; name is the client's text,
+   read from the window itself. Long titles scroll inside their viewport; help text keeps the client's scrolling. */
+body { width: 100%; height: 100%; }
+</style>
+</head>
+<body data-model="sheet">
+<div class="shell" id="shell">
+<div class="glass" id="panel" data-attr-class="'glass strip ' + title">
+	<div class="sheen"/>
+	<div class="strip-text" id="strip-viewport"><span id="strip-content">{{name}}</span></div>
+</div>
+</div>
+</body>
+</rml>

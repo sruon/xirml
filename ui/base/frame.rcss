@@ -1,0 +1,58 @@
+/*
+ Styles for themes that draw the game's window frame (classic). The theme's theme.rml loads this after components.rcss.
+ Panels become game-style windows drawn by the xiframe decorator, titles sit on the top line, and the cursor is a soft
+ fill (ui/cursors/theme-frame.rcss) with a pointing hand. Layout, type and motion stay as in components.rcss.
+*/
+
+.glass, .chat-glass, .chat-glass.input {
+	border-radius: 0; border-width: 0; box-shadow: none; overflow: visible;
+	background-color: transparent;
+	decorator: xiframe(var(--frame-rule) var(--frame-side) var(--frame-top) var(--frame-bottom));
+}
+/* the chat log clips its lines at its edges like the game: new lines slide in from the bottom, old ones leave at the top */
+.chat-glass { overflow: hidden; }
+/* keep text inside the frame's lines and corner squares, and shift the content back to where the game has it */
+.chat-lines { left: 5dp; top: 5dp; right: 5dp; bottom: 5dp; }
+.chat-lines-content { left: -5dp; top: -5dp; right: -5dp; }
+.chat-line { margin-right: 5dp; }
+.sheen, .sigil { display: none; }
+
+/* the title sits centred on the top line, outlined so the line doesn't run through it */
+.header { position: relative; }
+.panel-title {
+	position: absolute; left: 0; right: 0; top: var(--frame-title-top);
+	text-align: center;
+	font-family: var(--font-frame-title); font-style: italic; font-weight: bold; font-size: var(--size-frame-title); letter-spacing: 0.3dp; text-transform: none;
+	color: var(--frame-title);
+	font-effect: outline(1dp var(--frame-title-outline));
+}
+.glass .band.head .seg, .glass .band .seg.tone-section { /* needs to beat contract.rml's heading style, which loads after this sheet */
+	font-family: var(--font-frame-title); font-style: italic; font-weight: bold; font-size: var(--size-frame-title); letter-spacing: 0.3dp; text-transform: none;
+	color: var(--frame-title);
+	font-effect: outline(1dp var(--frame-title-outline));
+}
+.glass .band .seg.tone-section { color: var(--gold); font-size: var(--size-title); }
+.panel-title.named { display: block; }
+.rule, .band-rule { decorator: linear-gradient(90deg, var(--frame-rule)00, var(--frame-divider) 20%, var(--frame-divider) 80%, var(--frame-rule)00); }
+
+/* settings panel: only the title sits on the line */
+.cfg-subtitle { display: none; }
+
+/* a sheet without a name: only the title sits on the line, without the empty band and its rule */
+.header.bare { height: var(--sheet-header-bare); padding: 0; }
+.rule.bare { display: none; }
+/* a sheet's name sits low in the header, below the title on the top line */
+.sheet-head-name { align-self: flex-end; }
+/* a menu's own title (a first heading with nothing else in it) sits on the top line too */
+.contract .screen-slot.role-heading.single:first-child { min-height: 0; height: 6dp; padding: 0; border-bottom-width: 0; }
+.contract .screen-slot.role-heading.single:first-child .screen-field.role-title {
+	position: absolute; left: 0; right: 0; top: var(--frame-title-top); margin-top: -6dp; /* the slot sits below the content's 6dp top padding */
+	text-align: center;
+	font-family: var(--font-frame-title); font-style: italic; font-weight: bold; font-size: var(--size-frame-title); letter-spacing: 0.3dp; text-transform: none;
+	color: var(--frame-title);
+	font-effect: outline(1dp var(--frame-title-outline));
+}
+/* the page arrows sit on the same line, either side of the title */
+.contract .screen-slot.role-page-prev, .contract .screen-slot.role-page-next { top: var(--frame-title-top); min-height: 0; }
+.contract .screen-slot.role-page-prev { left: 5dp; right: auto; }
+.contract .screen-slot.role-page-prev .screen-field, .contract .screen-slot.role-page-next .screen-field { font-effect: outline(1dp var(--frame-title-outline)); }

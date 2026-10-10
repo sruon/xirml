@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "name": "FF7",
+  "description": "Bevelled blue windows and a white glove, after the 1997 menus.",
+  "order": 40,
+  "bundled": true,
+  "preview": { "top": "#0a1cba", "bottom": "#020434", "rule": "#d6d4da" },
+  "capabilities": { "windowStyleArt": false }
+}

@@ -1,0 +1,6 @@
+/* rows = raised: each menu row is a lightly lit bar with a soft shadow, like the game's buttons */
+.screen-slot.action {
+	margin: 1dp 0; border-radius: 3dp;
+	decorator: linear-gradient(180deg, #ffffff17, #0000002e);
+	box-shadow: #ffffff1f 0 1dp 0 0 inset, #00000073 0 1dp 2dp 0;
+}

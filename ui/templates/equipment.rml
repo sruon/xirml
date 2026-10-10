@@ -1,0 +1,65 @@
+<rml>
+<head>
+<title>xirml equipment</title>
+<link type="text/template" href="xirml:theme"/>
+<link type="text/template" href="item-card.rml"/>
+<style>
+/* layout only: the client's 4x4 grid (main sub range ammo / head neck ear ear / body hands ring ring / back waist legs feet), then the detail card */
+/* The wider detail card sets the panel width; the gear grid stays compact and centred. */
+body { width: 100%; height: 100%; }
+.glass { display: block; width: var(--equipment-width); height: auto; right: auto; bottom: auto; }
+.grid { position: relative; display: flex; flex-direction: row; flex-wrap: wrap; margin: 8dp auto 0 auto; width: 176dp; }
+/* Descriptions reserve five lines and grow to seven; RmlUi measures any clipped content. */
+.card, .card-inner { display: block; flex: none; }
+.card-top > div:last-child { flex: 1; min-width: 0; }
+.card-title { word-break: break-word; }
+.big { flex-shrink: 0; }
+.desc { min-height: 72.5dp; max-height: 101.5dp; font-size: var(--size-small); line-height: 14.5dp; }
+.desc-box .more { visibility: hidden; }
+.desc-box.overflow .more { visibility: visible; }
+.hints { margin-top: 8dp; }
+/* the pointer (when one is chosen) points into the selected cell from the gap on its left */
+.cell-cursor .cursor-pointer { left: auto; right: 100%; margin-right: -12dp; }
+.equip-bazaar { margin: 4dp 10dp 0; padding: 0; height: 24dp; line-height: 24dp; text-align: center; }
+.equip-bazaar.selected { color: var(--white); box-shadow: var(--gold) 0 0 0 1dp inset; }
+.inspect-info { padding: 0 10dp 8dp; }
+.inspect-info .equip-stats { margin: 0; }
+.inspect-comment { margin-top: 6dp; font-size: var(--size-small); line-height: 14.5dp; white-space: pre-wrap; word-break: break-all; color: var(--ink-body); }
+</style>
+</head>
+<body data-model="equipment">
+<div class="shell" id="shell">
+<div class="glass" id="panel" fit-content data-event-mousedown="panelPress()">
+	<div class="sheen"/>
+	<div class="header">
+		<div class="sigil">◇</div>
+		<div class="panel-title">{{inspecting ? (equipTitle == '' ? 'Check' : equipTitle) : 'Equipment'}}</div>
+	</div>
+	<div class="inspect-info" data-if="inspecting">
+		<div class="equip-stats"><span data-for="st : stats"><span class="stat-label">{{st.label}}</span><span class="stat-value">{{st.value}}</span></span></div>
+		<div class="inspect-comment" data-if="equipComment != ''">{{equipComment}}</div>
+	</div>
+	<div class="rule"/>
+	<div class="grid">
+		<div class="cell" data-for="c : cells" data-class-selected="it_index + 1 == equipCursor" data-class-filled="c.id != 0" data-class-rare="c.rare" data-class-ex="c.exclusive"
+			data-event-mousedown="press(it_index + 1)" data-event-dblclick="confirm(it_index + 1)" data-event-mouseover="hover(it_index + 1)" data-event-mouseout="hover(0)">
+			<img data-if="c.icon != ''" data-attr-src="c.icon"/>
+			<div class="cell-label" data-if="c.id == 0">{{ it_index | equipment_slot }}</div>
+		</div>
+		<div class="cell-cursor" data-style-transform="'translate(' + cursorX + 'dp, ' + cursorY + 'dp)'" data-class-idle="!focused" data-class-none="!hasCursor"><div class="cursor-pointer"/></div>
+	</div>
+	<div class="btn equip-bazaar" data-if="bazaarButton &gt; 0" data-class-selected="equipCursor == bazaarButton" data-event-mousedown="confirm(bazaarButton)">Bazaar</div>
+	<div class="equip-stats" data-if="!inspecting"><span data-for="st : stats"><span class="stat-label">{{it_index == 0 ? 'Attack' : 'Defense'}}</span><span class="stat-value">{{st.value}}</span></span></div>
+	<div class="card"><div class="card-inner" id="card-inner">
+		<div class="card-top"><template src="item-card">
+			<div class="chip" data-if="item.itemLevel &gt; 0">iLv. {{item.itemLevel}}</div>
+			<div class="chip rare" data-if="item.rare"><span class="icon">{{ 'rare' | icon }}</span>Rare</div>
+			<div class="chip ex" data-if="item.exclusive"><span class="icon">{{ 'ex' | icon }}</span>Ex</div>
+		</template></div>
+		<div class="desc-box"><div class="desc" id="description">{{item.id != 0 || itemName == '' ? itemDescription : 'Nothing equipped.'}}</div><div class="more icon">{{ 'more' | icon }}</div></div>
+		<div class="hints"><span><span class="key"><span class="icon">{{ 'enter' | icon }}</span></span>{{inspecting ? 'View' : 'Change'}}</span><span><span class="key">Esc</span>Back</span></div>
+	</div></div>
+</div>
+</div>
+</body>
+</rml>

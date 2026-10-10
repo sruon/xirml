@@ -1,0 +1,18 @@
+<rml>
+<head>
+<title>xirml buffs</title>
+<link type="text/template" href="xirml:theme"/>
+<style>
+/* layout only: up to 32 effects, ten to a row, from the native window's top-left; no glass, the icons carry their own frames */
+body { width: 248dp; height: 112dp; }
+.buffs { position: absolute; left: 6dp; top: 6dp; right: 6dp; display: flex; flex-direction: row; flex-wrap: wrap; }
+</style>
+</head>
+<body data-model="buffs">
+<div class="shell" id="shell">
+<div class="buffs" id="panel">
+	<div class="buff" data-for="b : buffs" data-class-debuff="b.debuff" data-class-selected="it_index + 1 == cursor"><img data-if="b.icon != ''" data-attr-src="b.icon"/></div>
+</div>
+</div>
+</body>
+</rml>

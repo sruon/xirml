@@ -1,0 +1,75 @@
+<rml>
+<head>
+<title>xirml sheet</title>
+<link type="text/template" href="xirml:theme"/>
+<style>
+/* RmlUi owns the sheet's size: the host measures #panel after binding and layout. */
+body { width: 100%; height: 100%; }
+.glass { display: block; width: var(--sheet-width); height: auto; right: auto; bottom: auto; }
+.glass.two { width: var(--sheet-columns-width); }
+.glass.network { width: var(--sheet-width); }
+.sheet-body { padding: 4dp 10dp 7dp 10dp; }
+.sheet-id { height: 20dp; }
+.sheet-badges { height: 17dp; }
+.sheet-chips { height: 18dp; margin-top: 0; }
+.sheet-gauge { height: 19dp; }
+.sheet-row { min-height: 15dp; }
+/* the network window: the client's 30px box, border included, so it stands as tall as the help line and title box beside it. Its
+   icon 20x16 at the left edge, the quality beside it, S over R 12px apart. No title: a box this tall has no band for one */
+.glass.network { height: 30dp; box-sizing: border-box; }
+.glass.network .sheet-body { padding: 0 10dp; height: 100%; }
+/* 30dp whatever the theme's border: a frame theme has none, and the box was 2dp short of the help line beside it */
+.net { height: 28dp; margin: 0 -6dp; top: 50%; margin-top: -14dp; }
+.net-bars { left: 0; top: 7dp; width: 18dp; height: 14dp; }
+/* the lamp's word on the top line, the percent under it */
+.net-percent { left: 20dp; top: 8dp; width: 38dp; height: 12dp; text-align: left; }
+.net-pair { top: 2dp; right: 2dp; width: 40dp; height: 24dp; }
+.net-line { height: 12dp; }
+.sheet-rows.two .sheet-row { width: 50%; }
+.sheet-rows.two .sheet-row:nth-child(2n) { padding-left: 10dp; }
+</style>
+</head>
+<body data-model="sheet">
+<div class="shell" id="shell">
+<div class="glass" id="panel" fit-content data-class-two="columns > 1" data-class-network="net_shown" data-event-mousedown="panelPress()">
+	<div class="sheen"/>
+	<div class="header" data-if="title != ''" data-class-bare="name == ''">
+		<div class="sigil">◇</div>
+		<div class="panel-title" data-class-named="name != ''">{{title}}</div>
+		<div class="sheet-name sheet-head-name" data-if="name != ''">{{name}}</div>
+	</div>
+	<div class="rule" data-if="title != ''" data-class-bare="name == ''"/>
+	<div class="sheet-body">
+		<div class="sheet-id" data-if="name != '' &amp;&amp; title == ''"><div class="sheet-name">{{name}}</div></div>
+		<div class="sheet-badges" data-if="badges.size > 0">
+			<div class="sheet-job" data-for="b : badges"><div data-attr-class="'badge ' + b.role">{{b.label}}</div><div data-attr-class="'sheet-level tone-' + b.tone">{{b.value}}</div></div>
+		</div>
+		<div class="chips sheet-chips" data-if="chips.size > 0"><div data-for="c : chips" data-attr-class="'chip ' + c.tone">{{c.label}}</div></div>
+		<div class="sheet-gauge" data-for="g : gauges">
+			<div class="sheet-gauge-head"><div class="sheet-label">{{g.label}}</div><div class="sheet-value">{{g.value}}</div></div>
+			<div class="sheet-bar">
+				<div data-attr-class="'gauge sheet-meter ' + g.tone"><div class="gauge-fill" data-style-transform="'scaleX(' + g.fill + ')'"/><div class="gauge-gloss"/></div>
+				<div class="sheet-bar-extra" data-if="g.extra != ''">{{g.extra}}</div>
+			</div>
+		</div>
+		<div class="net" data-if="net_shown">
+			<div data-attr-class="'net-bars ' + net_tier"><div class="net-bar" data-class-lit="net_bars &gt;= 1"/><div class="net-bar" data-class-lit="net_bars &gt;= 2"/><div class="net-bar" data-class-lit="net_bars &gt;= 3"/><div class="net-bar" data-class-lit="net_bars &gt;= 4"/></div>
+			<div class="net-percent">{{net_percent}}</div>
+			<div class="net-pair">
+				<div class="net-line"><div class="net-key">S</div><div class="net-number">{{net_send}}</div></div>
+				<div class="net-line"><div class="net-key">R</div><div class="net-number">{{net_receive}}</div></div>
+			</div>
+		</div>
+		<div class="sheet-rows" data-class-two="columns > 1">
+			<div class="sheet-row" data-for="r : rows" data-class-button="r.button > 0" data-class-selected="r.button > 0 &amp;&amp; r.button == cursor" data-event-mousedown="press(r.button)" data-event-dblclick="confirm(r.button)">
+				<div class="sheet-label">{{r.label}}</div>
+				<div data-if="r.fill >= 0" data-attr-class="'gauge sheet-inline ' + r.extraTone"><div class="gauge-fill" data-style-transform="'scaleX(' + r.fill + ')'"/><div class="gauge-gloss"/></div>
+				<div data-attr-class="'sheet-value tone-' + r.tone">{{r.value}}</div>
+				<div data-if="r.extra != ''" data-attr-class="'sheet-extra tone-' + r.extraTone">{{r.extra}}</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+</body>
+</rml>

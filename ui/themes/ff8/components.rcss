@@ -1,0 +1,33 @@
+/* ff8: the brushed grey window, small grey capitals for titles, gauges in a silver frame. Loads after ff7's components */
+
+/* the window: dark on the left, lighter from a third in, slightly darker on the right. Light top and left edges, dark bottom and right */
+.glass, .chat-glass {
+	border: 1.25dp var(--ff8-bevel-light);
+	border-right-color: var(--ff8-bevel-dark);
+	border-bottom-color: var(--ff8-bevel-dark);
+	decorator: linear-gradient(90deg, var(--ff8-left) 0%, var(--ff8-mid) 32%, var(--ff8-mid) 78%, var(--ff8-right) 100%);
+}
+.chat-glass { decorator: linear-gradient(90deg, var(--chat-glass-bottom) 0%, var(--chat-glass-top) 32%, var(--chat-glass-top) 78%, var(--chat-glass-bottom) 100%); }
+.chat-glass.input { decorator: linear-gradient(90deg, var(--chat-glass-bottom), var(--input-glass)); }
+
+/* titles: small grey capitals on the window's top edge, like HELP and COMMAND in the original */
+.panel-title, .glass .band.head .seg, .strip.title .strip-text {
+	font-size: var(--size-tiny); font-weight: 800; letter-spacing: 1.2dp; text-transform: uppercase;
+	color: var(--ff8-label);
+}
+/* the original has no line under titles, so the rule is kept but quieter */
+.rule, .glass .band-rule { height: 1dp; decorator: none; background-color: var(--ff8-bevel-dark); }
+
+/* labels in the normal text grey */
+.sheet-label, .stat-label { color: var(--ink-soft); }
+
+/* gauges: a dark tube in a silver frame, lit along the middle */
+.gauge, .meter { box-shadow: var(--ff8-gauge-frame) 0 0 0 1dp, var(--ff8-bevel-outer) 0 0 0 2dp; }
+.gauge-gloss { top: 25%; bottom: 40%; background-color: #ffffff70; }
+
+/* menus style their heading after the theme loads, so this needs the extra class to win */
+body.contract .screen-slot.role-heading .screen-field.role-title {
+	font-size: var(--size-tiny); font-weight: 800; letter-spacing: 1.2dp; text-transform: uppercase;
+	color: var(--ff8-label);
+}
+body.contract .screen-slot.role-heading { border-bottom-color: var(--ff8-bevel-dark); }

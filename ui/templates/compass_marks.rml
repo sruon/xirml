@@ -1,0 +1,22 @@
+<rml>
+<head>
+<title>xirml compass marks</title>
+<link type="text/template" href="xirml:theme"/>
+<style>
+/* layout only. An atlas rendered once: one 20dp cell per mark in CompassMarkCells order (N E S W, entity dot, map marker, tracked target).
+   The plugin draws each cell upright where the client put the mark; dots and markers are white so the client's colour tints them. */
+body { width: 100%; height: 100%; }
+.mk { position: absolute; top: 0; width: 20dp; height: 20dp; }
+.k0 { left: 0; } .k1 { left: 20dp; } .k2 { left: 40dp; } .k3 { left: 60dp; } .k4 { left: 80dp; } .k5 { left: 100dp; } .k6 { left: 120dp; }
+</style>
+</head>
+<body data-model="sheet">
+<div class="mk k0"><div class="compass-letter north">N</div></div>
+<div class="mk k1"><div class="compass-letter">E</div></div>
+<div class="mk k2"><div class="compass-letter">S</div></div>
+<div class="mk k3"><div class="compass-letter">W</div></div>
+<div class="mk k4"><div class="compass-dot"/></div>
+<div class="mk k5"><div class="compass-marker"/></div>
+<div class="mk k6"><div class="compass-target"/></div>
+</body>
+</rml>

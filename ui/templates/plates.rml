@@ -1,0 +1,16 @@
+<rml>
+<head>
+<title>xirml nameplates</title>
+<link type="text/template" href="xirml:theme"/>
+<style>
+/* layout only. An atlas rendered once per change: every cached name as white text in $font-nameplate at the plates' em, the theme's outline,
+   shadow, slant and the cell margin (the effects' overhang) applied as inline styles by the plugin. Cells flow left to right. */
+body { width: 1024dp; height: 2048dp; }
+#list { display: block; width: 1024dp; }
+.plate { display: inline-block; font-family: var(--font-nameplate); font-weight: 600; font-size: 56dp; color: #ffffff; white-space: nowrap; }
+</style>
+</head>
+<body data-model="plates">
+<div id="list" data-style-font-effect="effect" data-style-line-height="lineHeight"><div class="plate" data-for="n : names" data-style-transform="skew" data-style-margin="margin">{{n}}</div></div>
+</body>
+</rml>

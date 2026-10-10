@@ -1,0 +1,686 @@
+/*
+ The building blocks every template uses, styled with the tokens from theme.rcss.
+ Templates only add layout (sizes and positions) and data bindings.
+*/
+
+body, div { display: block; }
+* { box-sizing: border-box; }
+
+body {
+	font-family: var(--font-body); font-weight: var(--weight-body); font-size: var(--size-body);
+	color: var(--ink);
+}
+
+/* the whole document, including the margin around the panel for its shadow */
+.shell { position: absolute; left: 0; top: 0; right: 0; bottom: 0; }
+
+/* the glass panel, inset 6dp from the shell to leave room for its shadow (Shadow in the plugin) */
+.glass {
+	position: absolute; left: 6dp; top: 6dp; right: 6dp; bottom: 6dp;
+	display: flex; flex-direction: column;
+	border-radius: var(--radius-panel);
+	border: 1dp var(--glass-border);
+	decorator:
+		linear-gradient(180deg, var(--glass-top), var(--glass-bottom)),
+		radial-gradient(120% 60% at 50% -10%, var(--glass-tint), var(--gold)00 60%);
+	box-shadow: var(--glass-shadow);
+	overflow: hidden;
+}
+
+/* a faint diagonal sheen over the glass, and a warm line along the inside of the top edge */
+.sheen {
+	position: absolute; left: 0; top: 0; right: 0; bottom: 0;
+	decorator:
+		linear-gradient(180deg, var(--glass-edge) 0dp, var(--gold)00 2dp),
+		linear-gradient(115deg, #ffffff00 30%, var(--glass-sheen) 45%, #ffffff00 60%);
+	pointer-events: none;
+}
+
+/* header: icon, title, and a counter with a meter */
+.header {
+	display: flex; flex-direction: row; align-items: center;
+	height: var(--header-height); padding: 0 var(--pad);
+}
+/* the diamond before the title is a text glyph, since a rotated box loses its rotation when RmlUi redraws it */
+.sigil {
+	margin-right: 6dp;
+	font-size: 11dp; line-height: 12dp;
+	color: var(--gold);
+	font-effect: glow(0dp 3dp 0dp 0dp var(--gold)99);
+}
+.panel-title {
+	font-family: var(--font-title); font-weight: bold; font-size: var(--size-title); letter-spacing: var(--tracking-title); text-transform: uppercase;
+	color: var(--title);
+	font-effect: var(--glow-text);
+}
+.counter {
+	margin-left: auto;
+	display: flex; flex-direction: row; align-items: center;
+	font-size: var(--size-small); color: var(--ink-dim);
+}
+.counter .b { font-family: var(--font-numbers); color: var(--ink); font-weight: var(--weight-numbers); }
+.meter {
+	width: 54dp; height: 3dp; margin-left: 7dp;
+	border-radius: 2dp;
+	background-color: #ffffff14;
+	overflow: hidden;
+}
+.meter-fill {
+	height: 100%;
+	transform-origin: left center;
+	decorator: linear-gradient(90deg, var(--gold-deep), var(--gold-hi));
+	box-shadow: var(--gold)b3 0 0 6dp 0;
+}
+.meter.full .meter-fill { decorator: linear-gradient(90deg, var(--red-deep), var(--red)); }
+
+.rule {
+	height: 1dp; margin: 0 10dp;
+	decorator: linear-gradient(90deg, var(--gold)00, var(--gold)52 20%, var(--gold)52 80%, var(--gold)00);
+}
+
+/* lists: rows, the highlight that slides between them, and a scrollbar */
+.list-wrap { position: relative; margin: 6dp var(--gap) 0 var(--gap); }
+.list { position: absolute; left: 0; top: 0; right: var(--gap); bottom: 0; }
+.cursor {
+	position: absolute; left: 0; right: 0;
+	border-radius: var(--radius-row);
+	decorator: linear-gradient(90deg, var(--gold)38, var(--gold)0f 55%, var(--gold)00);
+	box-shadow: var(--gold)47 0 0 0 1dp inset;
+	top: 0;
+	transition: transform var(--motion-cursor) var(--ease-linear), opacity var(--motion-fade) var(--ease-linear);
+	pointer-events: none;
+}
+.cursor.idle { opacity: 0.45; }
+.cursor.none { opacity: 0; }
+.cursor-bar {
+	position: absolute; left: -1dp; top: 4dp; bottom: 4dp; width: 2dp;
+	border-radius: 2dp;
+	background-color: var(--gold-hi);
+	box-shadow: var(--glow-gold-strong);
+}
+/* the pointer left of the selected row, shown by ui/cursors/pointer-<kind>.rcss */
+.cursor-pointer { position: absolute; display: none; top: 50%; pointer-events: none; }
+
+.row {
+	position: relative;
+	display: flex; flex-direction: row; align-items: center;
+	padding: 0 var(--gap) 0 6dp;
+	border-radius: var(--radius-row);
+	transition: background-color var(--motion-hover) var(--ease-linear);
+}
+.row:hover { background-color: #ffffff0b; }
+.slot {
+	width: 22dp; height: 22dp; margin-right: var(--gap);
+	border-radius: var(--radius-row);
+	decorator: radial-gradient(circle at 50% 35%, #ffffff12, #00000059);
+	box-shadow: #ffffff14 0 0 0 1dp inset, #00000080 0 1dp 2dp 0;
+	padding: 1dp;
+}
+.slot img { width: 20dp; height: 20dp; }
+.row.rare .slot { box-shadow: var(--rare)99 0 0 0 1dp inset, #00000080 0 1dp 2dp 0; }
+.row.ex .slot { box-shadow: var(--ex)99 0 0 0 1dp inset, #00000080 0 1dp 2dp 0; }
+.level { font-family: var(--font-numbers); font-size: var(--size-tiny); color: var(--ink-dim); margin-left: 6dp; }
+.name {
+	flex: 1; white-space: nowrap; overflow: hidden;
+	font-size: var(--size-body); color: var(--ink-soft);
+	transition: color var(--motion-hover) var(--ease-linear);
+}
+.row.selected .name { color: var(--white); font-effect: var(--glow-selected); }
+/* usable items are yellow like in the game, selected or not. Rare and Ex get pills on the card instead, so yellow only means usable */
+.row.usable .name, .card-title.usable { color: var(--item-usable); }
+/* locked by the game, or gear your job, level or race can't wear */
+.row.unavailable .name, .row.unavailable .level { color: var(--ink-dim)99; }
+.row.unavailable .slot img { opacity: 0.45; }
+.count { width: var(--count-width); text-align: right; font-family: var(--font-numbers); font-weight: var(--weight-numbers); font-size: var(--size-small); color: var(--ink-dim); margin-left: 6dp; }
+.count .b { color: var(--ink); }
+/* no usable dot, the yellow name already says it */
+.use { display: none; }
+
+.rail {
+	position: absolute; right: 0; top: 2dp; bottom: 2dp; width: 3dp;
+	border-radius: 2dp;
+	background-color: #ffffff0f;
+}
+.thumb {
+	position: absolute; left: 0; right: 0;
+	border-radius: 2dp;
+	decorator: linear-gradient(180deg, var(--gold-hi), var(--gold));
+	box-shadow: var(--gold)99 0 0 5dp 0;
+	top: 0;
+	transition: transform var(--motion-thumb) var(--ease);
+}
+
+/* item card: big icon, title, pills, description, key hints */
+.card {
+	position: relative; flex: 1; margin: 10dp var(--gap) var(--gap); padding: 10dp 10dp var(--gap);
+	display: flex; flex-direction: column;
+	border-radius: var(--radius-card);
+	decorator: linear-gradient(180deg, #ffffff0b, #ffffff04);
+	box-shadow: #ffffff0f 0 0 0 1dp inset;
+}
+.card-inner { display: flex; flex-direction: column; flex: 1; }
+.card-top { display: flex; flex-direction: row; }
+.big {
+	width: 40dp; height: 40dp; margin-right: 10dp; padding: 4dp;
+	border-radius: 6dp;
+	decorator: radial-gradient(circle at 50% 30%, var(--gold)2e, #00000073);
+	box-shadow: var(--gold)59 0 0 0 1dp inset, var(--gold)1f 0 0 10dp 0;
+}
+.big img { width: 32dp; height: 32dp; }
+.card-title { font-size: var(--size-heading); font-weight: var(--weight-strong); color: var(--white); line-height: 17dp; }
+.chips { display: flex; flex-direction: row; flex-wrap: wrap; margin-top: 4dp; }
+.chip {
+	font-size: var(--size-tiny); padding: 0; margin-right: 10dp;
+	color: var(--ink-dim);
+}
+.chip.gold { color: var(--gold-hi); }
+.chip.teal { color: var(--teal); }
+.desc {
+	margin-top: 6dp; overflow: hidden;
+	font-size: var(--size-desc); line-height: 16.5dp; color: var(--ink-body);
+	white-space: pre-line;
+}
+
+.hints { display: flex; flex-direction: row; margin-top: auto; font-size: var(--size-tiny); color: var(--ink-dim); }
+.hints span { margin-right: var(--pad); white-space: nowrap; }
+/* icons from var(--font-icons), in the colour of the text around them. Pick one by name: {{ 'search' | icon }} */
+.icon { font-family: var(--font-icons); font-weight: 400; letter-spacing: 0; }
+.hints .icon { margin-right: 3dp; }
+.key .icon { margin-right: 0; }
+/* the game's ▼ that means the description continues, at the end of the last visible line */
+.desc-box { position: relative; }
+.desc-box .more { position: absolute; right: 0; bottom: 0; color: var(--ink-dim); font-size: 11dp; }
+.key {
+	display: inline-block; padding: 0 4dp; margin-right: 3dp;
+	border-radius: var(--radius-key);
+	color: var(--ink);
+	decorator: linear-gradient(180deg, #ffffff24, #ffffff0d);
+	box-shadow: #00000066 0 -1dp 0 0 inset, #ffffff1a 0 0 0 1dp;
+}
+
+
+/* rarity: item names, card titles and pills */
+/* Rare and Ex: pills on the card and outlines on equipment cells. Names only use the usable colour */
+.chip.rare, .chip.ex { padding: 0 6dp; margin-right: 4dp; border-radius: 8dp; line-height: 15dp; }
+.chip.rare .icon, .chip.ex .icon { margin-right: 3dp; }
+.chip.rare { color: var(--rare); background-color: var(--rare)24; box-shadow: var(--rare)66 0 0 0 1dp inset; }
+.chip.ex { color: var(--ex); background-color: var(--ex)24; box-shadow: var(--ex)66 0 0 0 1dp inset; }
+
+/* main job as text in its role colour */
+.badge {
+	margin-right: 4dp;
+	font-size: 9.5dp; font-weight: var(--weight-strong); letter-spacing: 0.4dp;
+	color: var(--ink);
+}
+.badge.tank { color: var(--role-tank); }
+.badge.healer { color: var(--role-healer); }
+.badge.support { color: var(--role-support); }
+.badge.dps { color: var(--role-dps); }
+.role-icon { display: var(--role-icons); margin-right: 3dp; font-size: 10dp; }
+.role-icon.tank { color: var(--role-tank)cc; }
+.role-icon.healer { color: var(--role-healer)cc; }
+.role-icon.support { color: var(--role-support)cc; }
+.role-icon.dps { color: var(--role-dps)cc; }
+
+/* gauges: a sunken track, a trail that catches up after a drop, the fill, and a gloss line on top.
+   The plugin animates the fill and trail with scaleX, so changes never rebuild the gradients. */
+.gauge {
+	position: relative; height: var(--gauge-height);
+	border-radius: 2dp;
+	background-color: var(--gauge-track);
+	box-shadow: #00000080 0 1dp 1dp 0 inset;
+	overflow: hidden;
+}
+.gauge.hp { height: 4dp; }
+.gauge-fill, .gauge-trail, .gauge-gloss {
+	position: absolute; left: 0; top: 0; right: 0; bottom: 0;
+	transform-origin: left center;
+}
+.gauge-trail { background-color: var(--gauge-trail); }
+.gauge-gloss { bottom: 50%; background-color: #ffffff2e; }
+.gauge.hp .gauge-fill { decorator: linear-gradient(90deg, var(--hp-start), var(--hp-end)); }
+.gauge.mp .gauge-fill { decorator: linear-gradient(90deg, var(--mp-start), var(--mp-end)); }
+.gauge.tp .gauge-fill { decorator: linear-gradient(90deg, var(--tp-start), var(--tp-end)); }
+.low .gauge.hp .gauge-fill { decorator: linear-gradient(90deg, var(--low-start), var(--low-end)); }
+/* gauges in game menus keep the game's colour (HP red, MP amber, TP blue), in the theme's shades */
+.gauge.g-red .gauge-fill { decorator: linear-gradient(90deg, var(--low-start), var(--low-end)); }
+.gauge.g-gold .gauge-fill { decorator: linear-gradient(90deg, var(--tp-start), var(--tp-end)); }
+.gauge.g-green .gauge-fill { decorator: linear-gradient(90deg, var(--hp-start), var(--hp-end)); }
+.gauge.g-blue .gauge-fill { decorator: linear-gradient(90deg, var(--mp-start), var(--mp-end)); }
+.gauge.g-violet .gauge-fill { decorator: linear-gradient(90deg, var(--violet)99, var(--violet)); }
+.gauge.g-plain .gauge-fill { decorator: linear-gradient(90deg, var(--ink)66, var(--ink)); }
+
+/* party member: job, name, level and support job, then HP, MP and TP with their values */
+.member {
+	position: relative; height: 41dp; padding: 4dp 8dp 0 10dp; margin: 0 4dp; overflow: hidden;
+	border-radius: var(--radius-row);
+	transition: background-color var(--motion-hover) var(--ease-linear);
+}
+.member:hover { background-color: #ffffff0d; }
+.member.selected {
+	decorator: linear-gradient(90deg, var(--gold)38, var(--gold)0f 55%, var(--gold)00);
+	box-shadow: var(--gold)47 0 0 0 1dp inset;
+}
+.member-head { display: flex; flex-direction: row; align-items: center; height: 15dp; }
+.member-name { flex: 1; white-space: nowrap; overflow: hidden; font-size: var(--size-body); color: var(--ink); }
+.member.target .member-name { color: var(--gold-hi); font-effect: var(--glow-text); }
+.member.low .member-name { color: var(--red); }
+.member.away .member-name, .member.away .badge { color: var(--ink-dim); }
+.jobs { font-size: var(--size-tiny); color: var(--ink-dim); margin-left: 6dp; }
+.head-hp { display: none; font-family: var(--font-numbers); font-size: var(--size-body); font-weight: var(--weight-numbers); color: var(--ink); margin-left: 6dp; }
+.member.low .head-hp { color: var(--red); }
+/* leader: a gold diamond after the name. Target: a gold bar on the left */
+.leader { margin-left: 4dp; font-size: 8dp; color: var(--gold); font-effect: var(--glow-text); }
+.pointer {
+	position: absolute; left: 2dp; top: 6dp; bottom: 6dp; width: 2dp;
+	border-radius: 2dp;
+	background-color: var(--gold-hi);
+	box-shadow: var(--glow-gold-strong);
+	opacity: 0;
+	transition: opacity var(--motion-fade) var(--ease-linear);
+}
+.member.target .pointer { opacity: 1; }
+.vitals { display: flex; flex-direction: row; margin-top: 3dp; }
+/* each value sits under its bar, left-aligned, to keep the name line clear (the classic variant puts them above) */
+.vital { flex: 1; margin-right: 6dp; display: flex; flex-direction: column-reverse; }
+.vital.hp { flex: 1.5; }
+.vital.tp { margin-right: 0; }
+.vital-value { font-family: var(--font-numbers); font-weight: var(--weight-numbers); height: 11dp; margin-top: 1dp; font-size: var(--size-tiny); line-height: 11dp; color: var(--ink-dim); text-align: left; }
+.vital.hp .vital-value { color: var(--ink-soft); }
+.member.low .vital.hp .vital-value { color: var(--red); }
+.member.tp-ready .vital.tp .vital-value { color: var(--gold-hi); font-effect: var(--glow-text); }
+.away-note { margin-top: 3dp; font-size: var(--size-tiny); color: var(--ink-dim); }
+
+/* party, classic variant: values above the bars, right-aligned */
+.variant-classic .vital { flex-direction: column; }
+.variant-classic .vital-value { margin-top: 0; line-height: 10dp; text-align: right; color: var(--ink-soft); }
+.variant-classic .vitals { margin-top: 2dp; }
+
+/* party, split variant: HP as a number on the name line, bars without values below */
+.variant-split .head-hp { display: block; }
+.variant-split .jobs { display: none; }
+.variant-split .vital-value { display: none; }
+.variant-split .vitals { margin-top: 7dp; }
+.variant-split .gauge, .variant-split .gauge.hp { height: 5dp; }
+
+/* buff tiles: a framed tile per effect, teal edge for buffs, red for debuffs */
+.buff {
+	width: var(--buff-size); height: var(--buff-size); margin: 0 3dp 3dp 0; padding: 1dp;
+	border-radius: var(--radius-row);
+	decorator: radial-gradient(circle at 50% 35%, #ffffff12, #00000073);
+	box-shadow: var(--buff-edge) 0 0 0 1dp inset, #000000a6 0 1dp 3dp 0;
+}
+.buff.debuff { box-shadow: var(--debuff-edge) 0 0 0 1dp inset, var(--red)40 0 0 4dp 0, #000000a6 0 1dp 3dp 0; }
+.buff img { width: 100%; height: 100%; }
+/* the effect you're about to cancel (the game's cursor on its buff bar) */
+.buffs .buff.selected { box-shadow: var(--gold-hi) 0 0 0 1.5dp, var(--gold)99 0 0 6dp 1dp; transform: scale(1.12); }
+/* buffs, bare variant: just the icons, each with a soft shadow */
+.variant-bare .buff, .variant-bare .buff.debuff { decorator: none; box-shadow: #000000b3 0 1dp 3dp 0; padding: 0; }
+
+/* equipment cell: a sunken well with the slot name when empty, a raised tile when filled, with a coloured outline for rarity.
+   The cursor is a single ring that moves between cells (.cell-cursor), so the selected cell only brightens. */
+.cell {
+	position: relative; width: var(--cell-size); height: var(--cell-size); margin: 0 var(--cell-gap) var(--cell-gap) 0; padding: 4dp;
+	border-radius: 6dp;
+	decorator: radial-gradient(circle at 50% 70%, #ffffff08, #00000080);
+	box-shadow: #000000a6 0 1dp 3dp 0 inset, #ffffff0d 0 -1dp 0 0 inset;
+	transition: background-color var(--motion-hover) var(--ease-linear), transform var(--motion-hover) var(--ease);
+}
+.cell.filled {
+	decorator: radial-gradient(circle at 50% 35%, #ffffff17, #00000059);
+	box-shadow: #ffffff1a 0 0 0 1dp inset, #00000080 0 1dp 2dp 0;
+}
+.cell:hover { background-color: #ffffff17; transform: scale(1.04); }
+.cell.selected { background-color: var(--gold)1a; }
+.cell.rare { box-shadow: var(--rare)73 0 0 0 1dp inset, #00000080 0 1dp 2dp 0; }
+.cell.ex { box-shadow: var(--ex)73 0 0 0 1dp inset, #00000080 0 1dp 2dp 0; }
+.cell img { width: 32dp; height: 32dp; }
+.cell-label {
+	position: absolute; left: 0; right: 0; top: 0; line-height: var(--cell-size);
+	font-size: 8.5dp; letter-spacing: 0.3dp; color: var(--ink-dim)a6; text-align: center;
+}
+.cell.selected .cell-label { color: var(--ink-soft); }
+.cell-cursor {
+	position: absolute; left: 0; top: 0; width: var(--cell-size); height: var(--cell-size);
+	border-radius: 6dp;
+	box-shadow: var(--gold-hi)cc 0 0 0 1dp inset, var(--glow-gold);
+	pointer-events: none;
+	transition: opacity var(--motion-fade) var(--ease-linear);
+}
+.cell-cursor.idle { opacity: 0.45; }
+.equip-stats { display: flex; flex-direction: row; margin: 2dp 0 0 7dp; height: 14dp; font-size: var(--size-tiny); }
+.equip-stats > span { margin-right: 12dp; }
+.stat-label { color: var(--ink-dim); margin-right: 4dp; }
+.stat-value { font-family: var(--font-numbers); color: var(--ink); font-weight: var(--weight-numbers); }
+.cell-cursor.none { opacity: 0; }
+
+/* text tones: the game's text colours mapped to the theme (menu template) */
+.tone-plain { color: var(--ink); }
+.tone-dim { color: var(--ink-disabled); }
+.tone-gold { color: var(--gold-hi); }
+.tone-red { color: var(--red); }
+.tone-green { color: var(--green); }
+.tone-blue { color: var(--blue); }
+.tone-violet { color: var(--violet); }
+
+/* chat log and input: plain glass and text spans, with no per-line shadows or gradients since lines change all the time */
+.chat-glass {
+	position: absolute; left: 6dp; top: 6dp; right: 6dp; bottom: 6dp;
+	border-radius: var(--radius-card);
+	border: 1dp var(--chat-glass-border);
+	decorator: linear-gradient(180deg, var(--chat-glass-top), var(--chat-glass-bottom));
+	overflow: hidden;
+}
+.chat-glass.input { decorator: none; background-color: var(--input-glass); }
+/* frame themes inset the chat text, and the inner box keeps the game's line positions. Tabs and scrollbars keep theirs */
+.chat-lines { position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden; clip: always; }
+.chat-lines-content { position: absolute; left: 0; top: 0; right: 0; }
+.chat-lines-stack { position: absolute; left: 0; right: 0; bottom: 0; }
+.chat-line {
+	margin-right: 10dp; min-height: var(--chat-pitch); line-height: var(--chat-pitch);
+	white-space: pre-wrap; word-break: break-word; /* wrap with the actual font, keeping the spaces between colour runs */
+	font-size: var(--chat-size); letter-spacing: var(--chat-tracking); font-weight: var(--weight-chat);
+	font-effect: outline(1dp #000000b0); /* the game draws its chat with a dark outline */
+}
+.tone-time { color: var(--chat-time); }
+/* Assist channel mentor badges keep their rank colour */
+.tone-mentor-bronze { color: #dca76a; }
+.tone-mentor-silver { color: #d7e1eb; }
+.phrase { color: var(--chat-phrase-ink); }
+/* auto-translate brackets keep the game's green opening and red closing marks */
+.tone-phrase-open, .tone-phrase-close { font-weight: bold; letter-spacing: 0; }
+.tone-phrase-open { color: var(--green); }
+.tone-phrase-close { color: var(--red); }
+/* the expanded log's tabs, where the game puts them. Each shows up to where the next starts, the active one in full on top */
+.chat-tab {
+	position: absolute; height: 12dp; line-height: 12dp; padding: 0 4dp 0 3dp;
+	overflow: hidden; white-space: nowrap;
+	font-size: var(--size-tiny); color: var(--chat-tab);
+	background-color: var(--chat-tab-bg);
+	border-right: 1dp var(--chat-tab-divider);
+}
+.chat-tab.active { z-index: 1; color: var(--chat-tab-active); background-color: var(--chat-tab-active-bg); border-bottom: 1dp var(--chat-tab-active); }
+/* the game's chat scrollbar: track and thumb where the game draws them */
+.chat-scroll { position: absolute; width: 4dp; border-radius: 2dp; background-color: var(--chat-scroll-track); }
+.chat-thumb { position: absolute; left: 0; right: 0; border-radius: 2dp; background-color: var(--chat-scroll-thumb); }
+.chat-label {
+	position: absolute; height: 14dp; line-height: 14dp;
+	white-space: nowrap;
+	font-size: var(--size-tiny);
+	color: var(--chat-tab);
+}
+.chat-label.tone-gold, .chat-label.tone-red, .chat-label.tone-green, .chat-label.tone-blue, .chat-label.tone-violet {
+	color: var(--chat-tab-active);
+	border-bottom: 1dp var(--chat-tab-active);
+}
+.input-line {
+	position: absolute; left: 6dp; right: 6dp; top: 0; bottom: 0;
+	display: flex; flex-direction: row; align-items: center;
+	white-space: pre;
+	font-size: var(--chat-size); letter-spacing: var(--chat-tracking); font-weight: var(--weight-chat);
+	font-effect: outline(1dp #000000b0);
+}
+/* the chat mode the game shows over the input line ("Party"), as a tag before the text */
+.input-mode { margin-right: 6dp; padding: 0 5dp; border-radius: 3dp; font-size: var(--size-tiny); color: var(--gold-hi); background-color: var(--gold)26; border: 1dp var(--gold)66; }
+.caret { display: inline-block; width: 1.5dp; height: 13dp; background-color: var(--caret); }
+.caret.off { opacity: 0; }
+
+/* animations the plugin restarts by setting `animation` again */
+@keyframes open { from { opacity: 0; transform: translateY(4dp) scale(0.985); } to { opacity: 1; transform: translateY(0dp) scale(1); } }
+@keyframes in-up { from { transform: translateY(5dp); opacity: 0.55; } to { transform: translateY(0dp); opacity: 1; } }
+@keyframes in-down { from { transform: translateY(-5dp); opacity: 0.55; } to { transform: translateY(0dp); opacity: 1; } }
+@keyframes swap { from { opacity: 0.35; } to { opacity: 1; } }
+
+/* target box: name coloured by type and claim, distance on the right, an HP gauge with its trail, and the sub-target below */
+.target-head { display: flex; flex-direction: row; align-items: center; height: 16dp; }
+.target-name { flex: 1; white-space: nowrap; overflow: hidden; font-size: var(--size-body); font-weight: bold; color: var(--ink); font-effect: var(--glow-text); }
+.target.mob .target-name { color: var(--target-mob); }
+.target.pc .target-name { color: var(--target-pc); }
+.target.npc .target-name { color: var(--target-npc); }
+.target.claim-party .target-name { color: var(--claim-party); }
+.target.claim-other .target-name { color: var(--claim-other); }
+.target-distance { font-size: var(--size-small); color: var(--ink-dim); margin-left: 6dp; }
+.target-vital { display: flex; flex-direction: row; align-items: center; margin-top: 4dp; }
+.target-vital .gauge { flex: 1; height: 5dp; }
+.target-hpp { width: var(--count-width); text-align: right; font-family: var(--font-numbers); font-weight: var(--weight-numbers); font-size: var(--size-small); color: var(--ink); }
+.target.low .target-hpp { color: var(--red); }
+.target.sub { margin-top: 2dp; opacity: 0.85; }
+.target.sub .target-name { font-weight: var(--weight-body); font-size: var(--size-small); }
+.target.sub .target-vital .gauge { height: 3dp; }
+
+
+/* sheets: status, job levels, skills, the check window, the cast bar and vitals. A name with job badges, chips,
+   labelled meters and label/value rows, with numbers in a right-aligned column. */
+.sheet-body { display: flex; flex-direction: column; }
+.sheet-id { display: flex; flex-direction: row; align-items: center; }
+.sheet-name { flex: 1; white-space: nowrap; font-size: var(--size-heading); font-weight: var(--weight-strong); color: var(--white); }
+/* a sheet with a name (status, check): the name goes at the top, above the first rule. Frame themes put the title on the frame */
+.panel-title.named { display: none; }
+.sheet-badges { display: flex; flex-direction: row; align-items: center; }
+.sheet-job { display: flex; flex-direction: row; align-items: center; margin-right: 8dp; }
+.sheet-job .badge { margin-right: 3dp; }
+.sheet-level { font-family: var(--font-numbers); font-size: var(--size-small); font-weight: var(--weight-numbers); color: var(--ink); }
+.sheet-chips .chip { margin-right: 4dp; }
+.sheet-gauge { display: flex; flex-direction: column; justify-content: center; }
+.sheet-gauge-head { display: flex; flex-direction: row; height: 12dp; line-height: 12dp; }
+/* a gauge label keeps its width and the value gets the rest, so long labels don't run into the value */
+.sheet-gauge-head .sheet-label { flex: none; }
+.sheet-gauge-head .sheet-value { flex: 1; margin-left: 0; padding-left: 6dp; }
+.sheet-meter { margin-top: 2dp; height: 4dp; }
+/* a small number at the bar's right end, centred on the bar so the row height doesn't change */
+.sheet-bar { display: flex; flex-direction: row; align-items: center; }
+.sheet-bar .sheet-meter { flex: 1; }
+.sheet-bar-extra { flex: none; margin: 2dp 0 0 5dp; height: 4dp; line-height: 4dp; font-size: var(--size-tiny); color: var(--ink-soft); overflow: visible; }
+/* network window, laid out like the game's: signal bars, the percentage next to them, and S over R with the letters
+   bold in the accent colour and the counters in the numbers font */
+.net { position: relative; }
+.net-bars, .net-percent, .net-pair { position: absolute; }
+/* four rising signal bars, lit up to the current quality in its colour */
+.net-bars .net-bar { position: absolute; bottom: 0; width: 3dp; border-radius: 1dp; background-color: var(--net-unlit); }
+.net-bars .net-bar:nth-child(1) { left: 0; height: 4dp; }
+.net-bars .net-bar:nth-child(2) { left: 5dp; height: 7dp; }
+.net-bars .net-bar:nth-child(3) { left: 10dp; height: 10dp; }
+.net-bars .net-bar:nth-child(4) { left: 15dp; height: 14dp; }
+.net-bars.good .net-bar.lit { background-color: var(--net-good); }
+.net-bars.fair .net-bar.lit { background-color: var(--net-fair); }
+.net-bars.poor .net-bar.lit { background-color: var(--net-poor); }
+.net-percent, .net-number { font-family: var(--font-numbers); font-weight: var(--weight-numbers); color: var(--ink); white-space: nowrap; }
+.net-percent { font-size: var(--size-body); line-height: 12dp; text-align: right; }
+.net-line { display: flex; flex-direction: row; line-height: 12dp; }
+.net-key { flex: none; width: 10dp; font-weight: var(--weight-strong); color: var(--gold); }
+.net-number { flex: 1; text-align: right; font-size: var(--size-body); }
+.sheet-inline { flex: 2; height: 4dp; margin-right: 8dp; }
+.sheet-rows { display: flex; flex-direction: row; flex-wrap: wrap; }
+.sheet-row {
+	width: 100%;
+	display: flex; flex-direction: row; align-items: center;
+	border-radius: var(--radius-row);
+}
+.sheet-row.button:hover { background-color: #ffffff0b; }
+.sheet-row.selected { background-color: var(--gold)1a; box-shadow: var(--gold)47 0 0 0 1dp inset; }
+.sheet-row.selected .sheet-label { color: var(--white); font-effect: var(--glow-selected); }
+.sheet-label { flex: 1; white-space: nowrap; font-size: var(--size-small); color: var(--ink-dim); }
+.sheet-value { font-family: var(--font-numbers); white-space: nowrap; text-align: right; font-size: var(--size-small); font-weight: var(--weight-numbers); }
+.sheet-gauge .sheet-value { color: var(--ink-soft); }
+.sheet-extra { width: var(--count-width); font-family: var(--font-numbers); font-weight: var(--weight-numbers); white-space: nowrap; text-align: right; font-size: var(--size-small); margin-left: 4dp; }
+
+/* settings panel (/xirml): navigation column, sections, and the controls every setting uses (toggle, segmented, slider, btn) */
+.cfg-subtitle { margin-left: 8dp; font-size: var(--size-small); color: var(--ink-dim); }
+.cfg-close {
+	margin-left: auto; width: 18dp; height: 18dp; line-height: 17dp; text-align: center;
+	border-radius: var(--radius-key);
+	font-size: 14dp; color: var(--ink-dim);
+	transition: background-color var(--motion-hover) var(--ease-linear), color var(--motion-hover) var(--ease-linear);
+}
+.cfg-close:hover { background-color: #ffffff14; color: var(--ink); }
+.cfg-nav { width: 96dp; padding: 8dp 0 8dp 8dp; border-right: 1dp var(--control-line); }
+.cfg-nav-item {
+	height: 22dp; line-height: 22dp; padding: 0 8dp 0 5dp; margin-bottom: 2dp; white-space: nowrap;
+	border-radius: var(--radius-row) 0 0 var(--radius-row);
+	font-size: var(--size-small); color: var(--ink-dim);
+	transition: background-color var(--motion-hover) var(--ease-linear), color var(--motion-hover) var(--ease-linear);
+}
+.cfg-nav-item:hover { background-color: #ffffff0b; color: var(--ink-soft); }
+.cfg-nav-item .icon { display: inline-block; width: 13dp; font-size: 10.5dp; color: var(--ink-dim); }
+.cfg-nav-item.on .icon { color: var(--gold); }
+.cfg-nav-item.on { color: var(--white); decorator: linear-gradient(90deg, var(--gold)00, var(--gold)2e); box-shadow: var(--gold) -2dp 0 0 0 inset; }
+.cfg-section {
+	margin: 10dp 0 5dp 0; padding-bottom: 3dp;
+	font-size: var(--size-tiny); letter-spacing: 1.2dp; text-transform: uppercase; color: var(--gold);
+	border-bottom: 1dp var(--control-line);
+}
+.cfg-page > .cfg-section:first-child { margin-top: 0; }
+.cfg-hint { margin: 2dp 0 6dp 0; font-size: var(--size-tiny); color: var(--ink-dim); }
+.cfg-row, .cfg-window { display: flex; flex-direction: row; align-items: center; min-height: 26dp; padding: 3dp 0; }
+.cfg-window { min-height: 22dp; padding: 1dp 0; }
+.cfg-window .chip { margin-right: 6dp; }
+.cfg-window .btn { margin-right: 6dp; }
+.cfg-label { flex: 1; font-size: var(--size-small); color: var(--ink); }
+.cfg-sub { font-size: var(--size-tiny); color: var(--ink-dim); }
+.cfg-warn { color: var(--red); }
+.cfg-warn .icon { margin-right: 3dp; }
+.cfg-value { width: 34dp; text-align: right; font-size: var(--size-small); color: var(--ink); }
+.cfg-stat { font-size: var(--size-tiny); color: var(--ink-soft); line-height: 14dp; }
+.cfg-buttons { display: flex; flex-direction: row; flex-wrap: wrap; }
+.cfg-buttons .btn { margin: 0 6dp 6dp 0; }
+
+/* on/off switch */
+.toggle {
+	position: relative; width: 28dp; height: 15dp; margin-left: 4dp;
+	border-radius: 8dp;
+	background-color: var(--control-off);
+	box-shadow: var(--control-line) 0 0 0 1dp inset;
+	transition: background-color var(--motion-hover) var(--ease-linear);
+}
+.toggle .knob {
+	position: absolute; left: 2dp; top: 2dp; width: 11dp; height: 11dp;
+	border-radius: 6dp;
+	background-color: var(--ink-dim);
+	transition: transform var(--motion-hover) var(--ease), background-color var(--motion-hover) var(--ease-linear);
+}
+.toggle.on { background-color: var(--control-on); }
+.toggle.on .knob { transform: translateX(13dp); background-color: var(--gold-hi); }
+
+/* segmented choice */
+.segmented { display: flex; flex-direction: row; border-radius: var(--radius-key); box-shadow: var(--control-line) 0 0 0 1dp inset; }
+.pick {
+	height: 22dp; line-height: 22dp; padding: 0 7dp; text-align: center;
+	font-size: var(--size-small); color: var(--ink-dim);
+	transition: background-color var(--motion-hover) var(--ease-linear), color var(--motion-hover) var(--ease-linear);
+}
+.pick:hover { background-color: #ffffff0b; color: var(--ink-soft); }
+.pick.on { background-color: var(--control-on); color: var(--white); }
+.swatch {
+	display: inline-block; width: 10dp; height: 10dp; margin-right: 5dp; margin-top: 6dp; vertical-align: top;
+	border-radius: 2dp;
+	box-shadow: var(--control-line) 0 0 0 1dp inset;
+}
+
+/* buttons */
+.btn {
+	height: 20dp; line-height: 20dp; padding: 0 9dp;
+	border-radius: var(--radius-key);
+	font-size: var(--size-small); color: var(--ink);
+	background-color: var(--control-off);
+	box-shadow: var(--control-line) 0 0 0 1dp inset;
+	transition: background-color var(--motion-hover) var(--ease-linear);
+}
+.btn:hover { background-color: var(--control-hover); }
+.btn.on { background-color: var(--control-on); color: var(--white); }
+.btn.small { height: 17dp; line-height: 17dp; padding: 0 6dp; font-size: var(--size-tiny); }
+.btn.danger { background-color: var(--red-deep)cc; color: var(--white); }
+
+/* slider: RmlUi's range input */
+input.slider { display: inline-block; flex: 1; max-width: 110dp; height: 14dp; margin: 0 6dp; }
+input.slider slidertrack { height: 4dp; margin-top: 5dp; border-radius: 2dp; background-color: var(--control-off); box-shadow: var(--control-line) 0 0 0 1dp inset; }
+input.slider sliderbar { width: 11dp; height: 11dp; margin-top: 1dp; border-radius: 6dp; background-color: var(--gold-hi); box-shadow: var(--gold)99 0 0 4dp 0; }
+input.slider sliderarrowdec, input.slider sliderarrowinc { width: 0; height: 0; }
+
+/* theme editor (Settings, Theme page): toolbar, the selected token's card, and the token list */
+.te-bar, .te-channel { display: flex; flex-direction: row; align-items: center; min-height: 20dp; margin-bottom: 3dp; }
+.te-bar .btn { margin-left: 4dp; }
+.te-name { flex: 1; white-space: nowrap; overflow: hidden; font-size: var(--size-small); color: var(--title); }
+.te-unsaved { font-size: var(--size-tiny); color: var(--gold-hi); }
+.te-note { margin-bottom: 3dp; font-size: var(--size-tiny); color: var(--ink-dim); }
+/* fonts row: one pick per role with its font. The open one lists its choices, each with a sample in its own face */
+.font-roles { flex-shrink: 0; margin-bottom: 4dp; }
+.font-role { flex: 1; height: 24dp; padding: 2dp 5dp 0 5dp; line-height: 10dp; text-align: left; }
+.font-role-name { font-size: 8dp; letter-spacing: 0.6dp; text-transform: uppercase; color: var(--gold); }
+.font-current { white-space: nowrap; overflow: hidden; font-size: var(--size-tiny); }
+.font-list { flex: 1; min-height: 0; overflow-y: auto; margin-bottom: 2dp; }
+.font-choice { padding: 2dp 3dp 3dp 6dp; border-radius: var(--radius-row); }
+.font-choice:hover { background-color: #ffffff0b; }
+.font-choice.on { background-color: var(--control-on); box-shadow: var(--gold-hi) 2dp 0 0 0 inset; }
+.font-name { display: flex; flex-direction: row; font-size: var(--size-tiny); color: var(--ink-dim); }
+.font-choice.on .font-name { color: var(--white); }
+.font-name .chip { margin: 0 0 0 6dp; color: var(--teal); }
+.font-sample { display: block; font-size: 10dp; font-style: normal; font-effect: none; letter-spacing: 0dp; line-height: 1.5; white-space: nowrap; color: var(--ink); }
+
+/* scroll boxes (overflow: auto): without styling, RmlUi makes the scrollbar as wide as the box and leaves no room for content */
+scrollbarvertical { width: 4dp; margin-left: 2dp; }
+scrollbarvertical slidertrack { background-color: var(--control-off); border-radius: 2dp; }
+scrollbarvertical sliderbar { background-color: var(--gold)80; border-radius: 2dp; min-height: 16dp; }
+scrollbarvertical sliderarrowdec, scrollbarvertical sliderarrowinc { width: 0; height: 0; }
+
+/* compass: the disc is rendered once and laid over the game's tilted, rotating disc (compass_dial.rml). Letters, dots and
+   markers are upright sprites from an atlas (compass_marks.rml), with the clock line below (compass.rml) */
+.compass-dial {
+	position: absolute; left: 4dp; top: 4dp; right: 4dp; bottom: 4dp;
+	border-radius: 32dp; /* half of the disc in compass_dial.rml: 72dp minus 4dp on each side */
+	border: 1.5dp var(--compass-ring);
+	decorator: radial-gradient(circle, var(--compass-face-centre), var(--compass-face) 70%);
+	box-shadow: var(--compass-glow) 0 0 6dp 0, #00000080 0 0 0 1dp inset;
+}
+.compass-ring-inner { position: absolute; left: 12dp; top: 12dp; right: 12dp; bottom: 12dp; border-radius: 20dp; border: 1dp var(--compass-tick); }
+.compass-cross { position: absolute; background-color: var(--compass-cross); }
+.compass-tick { position: absolute; background-color: var(--compass-tick); }
+.compass-tick.north { background-color: var(--compass-north); }
+.compass-hub { position: absolute; left: 50%; top: 50%; width: 3dp; height: 3dp; margin: -1.5dp 0 0 -1.5dp; border-radius: 2dp; background-color: var(--compass-ring); }
+.compass-letter {
+	position: absolute; left: 0; top: 0; width: 20dp; height: 20dp; line-height: 20dp; text-align: center;
+	font-family: var(--font-title); font-weight: bold; font-size: 12dp; color: var(--compass-letter);
+	font-effect: outline(1.5dp #000000d0);
+}
+.compass-letter.north { color: var(--compass-north); }
+/* white with a dark rim, so the game's colour tints the white and the rim stays dark */
+.compass-dot { position: absolute; left: 7.5dp; top: 7.5dp; width: 5dp; height: 5dp; border-radius: 2.5dp; background-color: #ffffff; box-shadow: #000000c8 0 0 0 1.5dp; }
+.compass-marker { position: absolute; left: 5.5dp; top: 5.5dp; width: 9dp; height: 9dp; transform: rotate(45deg); background-color: #ffffff; border: 1.5dp #000000c8; }
+.compass-target { position: absolute; left: 3dp; top: 3dp; width: 14dp; height: 14dp; border-radius: 7dp; border: 2.5dp #ffffff; box-shadow: #000000c8 0 0 0 1dp, #000000c8 0 0 0 1dp inset; }
+.compass-clock {
+	position: absolute; left: 0; bottom: 4dp; height: 18dp; padding: 0 7dp 0 5dp;
+	display: flex; flex-direction: row; align-items: center;
+	border-radius: 9dp; border: 1dp var(--compass-clock-border); background-color: var(--compass-clock-bg);
+	white-space: nowrap; font-size: var(--size-small);
+}
+.compass-day { width: 8dp; height: 8dp; border-radius: 4dp; margin-right: 5dp; box-shadow: #00000099 0 0 0 1dp; }
+.compass-day.d0 { background-color: var(--day-0); } .compass-day.d1 { background-color: var(--day-1); }
+.compass-day.d2 { background-color: var(--day-2); } .compass-day.d3 { background-color: var(--day-3); }
+.compass-day.d4 { background-color: var(--day-4); } .compass-day.d5 { background-color: var(--day-5); }
+.compass-day.d6 { background-color: var(--day-6); } .compass-day.d7 { background-color: var(--day-7); }
+/* weather and moon are kept apart from the day so the day is easy to read */
+.compass-weather { margin-left: 7dp; padding-left: 7dp; border-left: 1dp var(--compass-clock-border); color: var(--ink-soft); }
+.compass-weather.fire { color: var(--day-0); } .compass-weather.earth { color: var(--day-1); }
+.compass-weather.water { color: var(--day-2); } .compass-weather.wind { color: var(--day-3); }
+.compass-weather.ice { color: var(--day-4); } .compass-weather.thunder { color: var(--day-5); }
+.compass-weather.light { color: var(--day-6); } .compass-weather.dark { color: var(--day-7); }
+/* a half circle plus an elliptical edge gives a real crescent, half moon or gibbous shape */
+.compass-lunar { display: flex; flex-direction: row; align-items: center; margin-left: 7dp; }
+.compass-moon { position: relative; width: 11dp; height: 11dp; border-radius: 5.5dp; overflow: hidden; clip: always; background-color: var(--compass-moon-dark); box-shadow: #00000099 0 0 0 1dp; }
+.compass-moon .hemisphere { position: absolute; top: 0; bottom: 0; left: 50%; width: 50%; background-color: var(--compass-moon-lit); }
+.compass-moon.wane .hemisphere { left: 0; }
+.compass-moon .terminator { position: absolute; left: 0; top: 0; width: 11dp; height: 11dp; border-radius: 5.5dp; }
+.compass-moon .terminator.shade { background-color: var(--compass-moon-dark); }
+.compass-moon .terminator.light { background-color: var(--compass-moon-lit); }
+.compass-moon-value { margin-left: 4dp; color: var(--ink-soft); font-family: var(--font-numbers); }
+.compass-moon-trend { margin-left: 2dp; color: var(--ink-dim); font-size: var(--size-tiny); }
+.compass-label { margin-left: 7dp; color: var(--compass-label); }
+.compass-time { font-family: var(--font-numbers); font-weight: var(--weight-numbers); color: var(--ink); margin-right: 5dp; }
+.compass-grid { color: var(--ink-dim); }
+
+/* help line and title box (strip.rml): one line of the game's text on thin glass */
+.glass.strip { flex-direction: row; align-items: center; padding: 0 10dp; }
+.strip-text { flex: 1; min-width: 0; overflow: hidden; clip: always; white-space: nowrap; }
+#strip-content { display: inline-block; position: relative; left: 0; }
+.strip.title .strip-text.scrolling { text-align: left; }
+.strip.help .strip-text { font-size: var(--size-body); color: var(--ink-soft); padding-left: 9dp; border-left: 2dp var(--gold)99; }
+.strip.title .strip-text { text-align: center; font-family: var(--font-title); font-weight: bold; font-size: var(--size-title); letter-spacing: var(--tracking-title); color: var(--title); font-effect: var(--glow-text); }

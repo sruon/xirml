@@ -1,0 +1,72 @@
+<rml>
+<head>
+<title>xirml inventory</title>
+<link type="text/template" href="xirml:theme"/>
+<link type="text/template" href="item-card.rml"/>
+<style>
+/* layout only; look comes from components.rcss and theme.rcss. Row geometry (10 rows of 26dp) is shared with the inventory binding. */
+body { width: 378dp; height: 100%; }
+#list-wrap { height: 260dp; }
+.cursor, .row { height: 26dp; }
+.desc { height: 66dp; }
+.desc-box .more { visibility: hidden; }
+.desc-box.overflow .more { visibility: visible; }
+/* the stack count follows the name; the level keeps the right edge */
+.row .name { flex: 0 1 auto; }
+.row .count { width: auto; text-align: left; }
+.row .level { margin-left: auto; }
+/* inventory_view = grid: the same rows as cells, five to a line (5 x (--cell-size + --cell-gap)); the inventory binding places the cell cursor */
+.cells { display: none; position: relative; flex-direction: row; flex-wrap: wrap; width: 220dp; margin: 0 auto; }
+.icons .cells { display: flex; }
+.icons .row, .icons .list > .cursor { display: none; }
+.cell .stack { position: absolute; right: 3dp; bottom: 1dp; font-family: var(--font-numbers); font-weight: var(--weight-numbers); font-size: var(--size-small); color: var(--ink); font-effect: outline(1dp #000000cc); }
+.cell.unavailable img { opacity: 0.45; }
+.cell-cursor .cursor-pointer { left: auto; right: 100%; margin-right: -12dp; }
+</style>
+</head>
+<body data-model="inventory">
+<div class="shell" id="shell" data-class-compact="compact" data-class-icons="grid">
+<div class="glass" id="panel" data-event-mousedown="panelPress()">
+	<div class="sheen"/>
+	<div class="header">
+		<div class="sigil">◇</div>
+		<div class="panel-title">{{title}}</div>
+		<div class="counter"><span class="b">{{used}}</span><span>&nbsp;/&nbsp;{{capacity}}</span><div class="meter" data-class-full="fill >= 100"><div class="meter-fill" data-style-transform="'scaleX(' + fill / 100 + ')'"/></div></div>
+	</div>
+	<div class="rule"/>
+	<div class="list-wrap" id="list-wrap" data-style-height="listHeight + 'dp'">
+		<div class="list" id="list">
+			<div class="cursor" data-style-transform="'translateY(' + cursorY + 'dp)'" data-class-idle="!focused" data-class-none="!(cursor > 0)"><div class="cursor-bar"/><div class="cursor-pointer"/></div>
+			<div class="row" data-for="row : rows" data-class-usable="row.usable" data-class-rare="row.rare" data-class-ex="row.exclusive" data-class-unavailable="row.unavailable" data-class-selected="it_index + 1 == cursor"
+				data-event-mousedown="press(it_index + 1)" data-event-dblclick="confirm(it_index + 1)" data-event-mouseover="hover(it_index + 1)" data-event-mouseout="hover(0)">
+				<div class="slot"><img data-if="row.icon != ''" data-attr-src="row.icon"/></div>
+				<div class="name">{{row.name}}</div>
+				<div class="count" data-if="row.count > 1">×<span class="b">{{row.count}}</span></div>
+				<div class="level" data-if="row.level > 0">Lv.{{row.level}}</div>
+				<div class="use"/>
+			</div>
+			<div class="cells">
+				<div class="cell filled" data-for="row : rows" data-class-rare="row.rare" data-class-ex="row.exclusive" data-class-unavailable="row.unavailable" data-class-selected="it_index + 1 == cursor"
+					data-event-mousedown="press(it_index + 1)" data-event-dblclick="confirm(it_index + 1)" data-event-mouseover="hover(it_index + 1)" data-event-mouseout="hover(0)">
+					<img data-if="row.icon != ''" data-attr-src="row.icon"/>
+					<div class="stack" data-if="row.count > 1">{{row.count}}</div>
+				</div>
+				<div class="cell-cursor" data-style-transform="'translate(' + cursorX + 'dp, ' + cursorY + 'dp)'" data-class-idle="!focused" data-class-none="!(cursor > 0)"><div class="cursor-pointer"/></div>
+			</div>
+		</div>
+		<div class="rail" data-visible="rail"><div class="thumb" data-style-transform="'translateY(' + thumbTop + 'dp)'" data-style-height="thumbHeight + 'dp'"/></div>
+	</div>
+	<div class="card"><div class="card-inner" id="card-inner">
+		<div class="card-top" data-alias-itemName="item.name" data-alias-itemUsable="item.usable"><template src="item-card">
+			<div class="chip" data-if="item.count &gt; 1">×{{item.count}}</div>
+			<div class="chip teal" data-if="item.usable &amp;&amp; item.type != 'Usable'">Usable</div>
+			<div class="chip rare" data-if="item.rare"><span class="icon">{{ 'rare' | icon }}</span>Rare</div>
+			<div class="chip ex" data-if="item.exclusive"><span class="icon">{{ 'ex' | icon }}</span>Ex</div>
+		</template></div>
+		<div class="desc-box"><div class="desc" id="description">{{item.description}}</div><div class="more icon">{{ 'more' | icon }}</div></div>
+		<div class="hints"><span><span class="key"><span class="icon">{{ 'enter' | icon }}</span></span>Use</span><span><span class="key">Esc</span>Back</span><span><span class="icon">{{ 'mouse' | icon }}</span>Double-click to use · Right-click to close</span></div>
+	</div></div>
+</div>
+</div>
+</body>
+</rml>

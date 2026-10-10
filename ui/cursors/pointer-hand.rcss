@@ -1,0 +1,11 @@
+/* cursor_pointer = hand: a hand left of the selected row, drawn from --cursor-hand */
+.cursor-pointer {
+	display: block;
+	left: var(--cursor-hand-left); width: var(--cursor-hand-size); height: var(--cursor-hand-size); margin-top: var(--cursor-hand-lift);
+	decorator: image(var(--cursor-hand) contain);
+}
+
+/* leave room for the hand in the inventory (menus already have a gutter) */
+.list .row { padding-left: 20dp; }
+/* the hand follows the highlight's left edge, wherever the highlight style puts it */
+.glass > .cursor { left: 3dp; }

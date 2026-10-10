@@ -1,0 +1,41 @@
+XirmlIcons.ttf: icons converted to TrueType outlines by tools/icons.py, unchanged otherwise.
+
+Game icons from https://game-icons.net, licensed under CC BY 3.0 (https://creativecommons.org/licenses/by/3.0/):
+  main: broadsword by lorc
+  sub: viking-shield by delapouite
+  range: pocket-bow by lorc
+  ammo: arrow-cluster by lorc
+  head: visored-helm by lorc
+  neck: gem-pendant by lorc
+  ear: earrings by delapouite
+  body: breastplate by lorc
+  hands: gauntlet by delapouite
+  ring: ring by delapouite
+  back: cape-armor by delapouite
+  waist: belt by lucasms
+  legs: leg-armor by delapouite
+  feet: boots by lorc
+  tank: checked-shield by lorc
+  healer: heart-plus by zeromancer
+  support: lyre by lorc
+  dps: crossed-swords by lorc
+
+Material Symbols by Google (https://github.com/google/material-design-icons), licensed under the Apache License 2.0
+(https://www.apache.org/licenses/LICENSE-2.0):
+  close: close
+  search: search
+  appearance: palette
+  panels: view_quilt
+  nameplates: badge
+  theme: tune
+  layout: open_with
+  diagnostics: monitoring
+  enter: keyboard_return
+  mouse: mouse
+  signal-1: signal_cellular_alt_1_bar
+  signal-2: signal_cellular_alt_2_bar
+  signal-3: signal_cellular_alt
+  warning: warning
+  more: keyboard_arrow_down
+  rare: star
+  ex: block

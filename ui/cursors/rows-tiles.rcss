@@ -1,0 +1,6 @@
+/* rows = tiles: each menu row is a sunken tile, like the macro palette keys */
+.screen-slot.action {
+	margin: 1dp 0; border-radius: 4dp;
+	decorator: radial-gradient(circle at 50% 70%, #ffffff0d, #00000073);
+	box-shadow: #000000a6 0 1dp 3dp 0 inset, #ffffff12 0 0 0 1dp inset;
+}

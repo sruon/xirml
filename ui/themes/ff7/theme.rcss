@@ -1,0 +1,174 @@
+/*
+ ff7: Final Fantasy VII's menus, redrawn. Solid windows in the default window blue (bright at the top left, near black at the
+ bottom right), a thin grey bevel with small rounded corners, white text with a hard shadow, cyan labels next to white
+ values, thin tube gauges and a white glove pointer.
+ Colours were picked from screenshots. The frames and glove are drawn by xirml (xiframe:glove is ui/cursors/glove.png).
+ Anything not set here comes from ui/base/theme.rcss.
+*/
+
+body {
+	--cursor-pointer: hand;  /* the glove, unless the player picks another pointer */
+
+	/* text: white with a dark shadow (labels are cyan, see --gold) */
+	--ink: #f2f2f6;
+	--ink-soft: #e2e4ee;
+	--ink-body: #dadcea;
+	--value-ink: #d4f8ff;
+	--ink-dim: #b4bcd6;
+	--ink-disabled: #7c809c;  /* greyed-out entries */
+	--white: #ffffff;
+	--text-shadow: #000018c8; /* the hard 1dp shadow under all text */
+
+	/* accents: --gold is the accent every component uses, cyan here like the LV, HP and MP labels */
+	--gold: #66e4f2;
+	--gold-hi: #d4f8ff;
+	--gold-deep: #1f8fb8;
+	--gold-warm: #ffffff;
+	--title: #ffffff;
+	--teal: #70f0b8;
+	--red: #ff8c8c;
+	--red-deep: #b8303c;
+	--green: #8cf0a8;
+	--blue: #8cd0ff;
+	--violet: #e4b0ff;
+
+	/* window: the default window blue from top to bottom, darker to the right, and the bevel */
+	--ff7-top-left: #0a1cbaf8;
+	--ff7-bottom-left: #04085af8;
+	--ff7-shade: #00000048;      /* the right edge ends up near #06108c at the top and #020434 at the bottom */
+	--ff7-bevel-outer: #7c7a80;  /* outer mid-grey line */
+	--ff7-bevel-light: #d6d4da;  /* light line */
+	--ff7-bevel-top: #e6e4ea;    /* brighter along the top */
+	--ff7-bevel-dark: #1e1e26;   /* dark inner line */
+	--ff7-bevel: 1.25dp;
+	--glass-top: var(--ff7-top-left);
+	--glass-bottom: var(--ff7-bottom-left);
+	--glass-border: var(--ff7-bevel-light);
+	--glass-shadow: var(--ff7-bevel-outer) 0 0 0 1dp, #000000a0 0 3dp 8dp 0, var(--ff7-bevel-dark) 0 0 0 1dp inset;
+	--glass-tint: #00000000;
+	--glass-sheen: #ffffff00;
+	--glass-edge: #ffffff00;
+
+	/* type: rounded letters like the original menu font, titles included */
+	--font-body: M PLUS Rounded 1c;
+	--font-title: M PLUS Rounded 1c;
+	--font-numbers: M PLUS Rounded 1c;
+	--font-nameplate: M PLUS Rounded 1c;
+	--weight-body: 500;
+	--weight-strong: 600;
+	--weight-numbers: 600;
+	--weight-chat: 500;
+	--size-title: 12.5dp;
+	--size-heading: 14dp;
+	--size-body: 12dp;
+	--size-desc: 11dp;
+	--size-small: 10.5dp;
+	--size-tiny: 9.5dp;
+	--tracking-title: 0.4dp;
+
+	/* shape: small radii, tight spacing */
+	--radius-panel: 4dp;
+	--radius-card: 3dp;
+	--radius-row: 2dp;
+	--radius-key: 2dp;
+
+	/* glows: the original has none, so they're all the drop shadow */
+	--glow-gold: #00000000 0 0 0 0;
+	--glow-gold-strong: #00000000 0 0 0 0;
+	--glow-text: shadow(1dp 1dp var(--text-shadow));
+	--glow-selected: shadow(1dp 1dp var(--text-shadow));
+
+	/* motion: faster than modern, the glove jumps between rows */
+	--ease: cubic-out;
+	--motion-hover: 0.08s;
+	--motion-cursor: 0.05s;
+	--motion-open: 0.16s;
+
+	/* controls */
+	--control-off: #00000040;
+	--control-hover: #ffffff14;
+	--control-on: #2a52e0;
+	--control-line: #b4b2ba80;
+
+	/* gauges: thin tubes. HP blue and MP green like the menu, TP pink like the Limit gauge, yellow at low HP */
+	--hp-start: #1060f0;
+	--hp-end: #9cc8ff;
+	--mp-start: #0cae64;
+	--mp-end: #a4f6cc;
+	--tp-start: #a82c6c;
+	--tp-end: #ff9ad0;
+	--low-start: #b88400;
+	--low-end: #fff07a;
+	--gauge-track: #14161e;
+	--gauge-trail: #ffffff70;
+	--gauge-height: 3dp;
+
+	/* job roles */
+	--role-tank: #8cc4ff;
+	--role-healer: #8cf0a8;
+	--role-support: #e4b0ff;
+	--role-dps: #ff9c8c;
+
+	/* item rarity */
+	--item-usable: #fff08c;
+	--rare: #ffe08c;
+	--ex: #d8b4ff;
+
+	/* target name */
+	--target-mob: #fff0a0;
+	--target-pc: #ffffff;
+	--target-npc: #a8f4c0;
+	--claim-party: #ff8c8c;
+	--claim-other: #e4b0ff;
+
+	/* nameplate HP bar: blue, then yellow, then red, on window blue */
+
+	/* status framing */
+	--buff-edge: #b4b2bacc;
+	--debuff-edge: #ff8c8ccc;
+
+	/* chat log and input: the same blue, lighter so you can see the game through it */
+	--chat-glass-top: #0814a8a8;
+	--chat-glass-bottom: #020640c4;
+	--chat-glass-border: #c6c4caa0;
+	--chat-time: #b4bcd6c0;
+	--chat-phrase-ink: #66e4f2;
+	--chat-tab: #b4bcd6;
+	--chat-tab-bg: #040a50e0;
+	--chat-tab-divider: #b4b2ba59;
+	--chat-tab-active: #ffffff;
+	--chat-tab-active-bg: #1c3cd0f0;
+	--chat-scroll-track: #00000059;
+	--chat-scroll-thumb: #c6c4cacc;
+	--input-glass: #040a60ec;
+	--caret: #ffffff;
+
+	/* compass: a blue disc with a grey ring */
+	--compass-face: #04085ad0;
+	--compass-face-centre: #0a1cbad0;
+	--compass-ring: var(--ff7-bevel-light);
+	--compass-tick: #b4b2bab3;
+	--compass-letter: #ffffff;
+	--compass-north: #ff8c8c;
+	--compass-glow: #00000080;
+	--compass-clock-bg: #04085ae6;
+	--compass-clock-border: var(--ff7-bevel-light);
+	--compass-cross: #b4b2ba40;
+	--compass-moon-dark: #020434;
+	--compass-label: #66e4f2;
+
+	/* cursor: the glove, with almost no fill behind the row (the original has none) */
+	--cursor-hand: xiframe:glove;
+	--cursor-hand-size: 18dp;
+	--cursor-hand-lift: -9dp;
+	--cursor-hand-left: 0dp;
+	--cursor-fill: #ffffff14;
+	--cursor-fill-end: #ffffff00;
+	--cursor-soft: #ffffff14;
+	--cursor-soft-end: #ffffff00;
+
+	/* nameplates */
+	--plate-italic: 0.21;
+	--plate-outline: 4;
+	--plate-shadow: 3;
+}

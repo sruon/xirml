@@ -1,0 +1,52 @@
+<rml>
+<head>
+<title>xirml party</title>
+<link type="text/template" href="xirml:theme"/>
+<style>
+/* layout only. RmlUi owns the size: the host measures #panel after binding and layout, and the plugin keeps the bottom edge on the
+   native list's, so the list grows upward like the native one. */
+body { width: 100%; height: 100%; }
+.glass { display: block; width: var(--party-width); height: auto; right: auto; bottom: auto; padding-bottom: 4dp; }
+</style>
+</head>
+<body data-model="party">
+<div class="shell" id="shell">
+<div class="glass" id="panel" fit-content>
+	<div class="sheen"/>
+	<div class="header">
+		<div class="sigil">◇</div>
+		<div class="panel-title">{{ members.size > 1 ? 'Party' : 'Solo' }}</div>
+		<div class="counter" data-if="members.size > 1"><span class="b">{{members.size}}</span><span>&nbsp;/&nbsp;6</span></div>
+	</div>
+	<div class="rule"/>
+	<div class="member" data-for="m : members" data-class-selected="it_index + 1 == cursor" data-class-target="m.target" data-class-low="m.hpPercent | low_hp(m.away)" data-class-away="m.away" data-class-tp-ready="m.tp >= 1000"
+		data-event-mousedown="press(it_index + 1)" data-event-dblclick="confirm(it_index + 1)">
+		<div class="pointer"/>
+		<div class="member-head">
+			<div data-attr-class="'icon role-icon ' + (m.job | role)" data-if="(m.job | job) != '' &amp;&amp; (m.job | role) != 'none'">{{ ((m.job | role) != 'none' ? (m.job | role) : '') | icon }}</div>
+			<div data-attr-class="'badge ' + (m.job | role)" data-if="(m.job | job) != ''">{{m.job | job}}<span data-if="m.level > 0">{{m.level}}</span></div>
+			<div class="member-name">{{m.name}}</div>
+			<div class="leader" data-if="m.leader">◆</div>
+			<div class="jobs" data-if="m.sub != 0">{{m.sub | job}}{{m.subLevel}}</div>
+			<div class="head-hp" data-if="!m.away">{{m.hp}}</div>
+		</div>
+		<div class="vitals" data-if="!m.away">
+			<div class="vital hp">
+				<div class="vital-value">{{m.hp}}</div>
+				<div class="gauge hp"><div class="gauge-trail" data-style-transform="'scaleX(' + m.hpPercent / 100 + ')'"/><div class="gauge-fill" data-style-transform="'scaleX(' + m.hpPercent / 100 + ')'"/><div class="gauge-gloss"/></div>
+			</div>
+			<div class="vital mp">
+				<div class="vital-value">{{m.mp}}</div>
+				<div class="gauge mp"><div class="gauge-trail" data-style-transform="'scaleX(' + m.mpPercent / 100 + ')'"/><div class="gauge-fill" data-style-transform="'scaleX(' + m.mpPercent / 100 + ')'"/><div class="gauge-gloss"/></div>
+			</div>
+			<div class="vital tp">
+				<div class="vital-value">{{m.tp}}</div>
+				<div class="gauge tp"><div class="gauge-fill" data-style-transform="'scaleX(' + (m.tp < 3000 ? m.tp / 3000 : 1) + ')'"/><div class="gauge-gloss"/></div>
+			</div>
+		</div>
+		<div class="away-note" data-if="m.away">{{m.zone == '' ? 'In another area' : m.zone}}</div>
+	</div>
+</div>
+</div>
+</body>
+</rml>

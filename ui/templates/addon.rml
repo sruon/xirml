@@ -1,0 +1,73 @@
+<rml>
+<head>
+<title>xirml addon</title>
+<link type="text/template" href="xirml:theme"/>
+<style>
+/* Another addon's settings (model/addon_form.hpp): the settings panel's header and controls, one row per setting. */
+body { width: 100%; height: 100%; }
+.glass { width: 270dp; height: auto; right: auto; bottom: auto; }
+.addon-header { cursor: move; }
+.addon-body { padding: 6dp var(--pad) 8dp var(--pad); }
+.addon-body .cfg-row { min-height: 22dp; padding: 1dp 0; }
+.stepper { display: flex; flex-direction: row; align-items: center; }
+.stepper .arrow {
+	width: 16dp; height: 18dp; line-height: 18dp; text-align: center;
+	border-radius: var(--radius-key);
+	font-size: 15dp; color: var(--gold);
+	transition: background-color var(--motion-hover) var(--ease-linear), color var(--motion-hover) var(--ease-linear);
+}
+.stepper .arrow:hover { background-color: #ffffff14; color: var(--gold-hi); }
+.stepper .current { min-width: 92dp; text-align: center; white-space: nowrap; font-size: var(--size-small); color: var(--white); }
+input.addon-text {
+	width: 110dp; height: 18dp; line-height: 18dp; padding: 0 5dp;
+	border-radius: var(--radius-key);
+	font-size: var(--size-small); color: var(--ink);
+	background-color: var(--control-off);
+	box-shadow: var(--control-line) 0 0 0 1dp inset;
+}
+input.addon-text:focus { box-shadow: var(--gold)99 0 0 0 1dp inset; }
+.addon-status .cfg-label { color: var(--ink-dim); }
+.addon-status .cfg-value { width: auto; white-space: nowrap; }
+.addon-status.tone-warn .cfg-label, .addon-status.tone-warn .cfg-value { color: var(--red); }
+.addon-separator { height: 1dp; margin: 4dp 0; background-color: var(--control-line); }
+</style>
+</head>
+<body data-model="addon">
+<div class="shell" id="shell">
+<div class="glass" id="panel" fit-content>
+	<div class="sheen"/>
+	<div class="header addon-header" data-event-mousedown="drag()">
+		<div class="sigil">◇</div>
+		<div class="panel-title">{{title}}</div>
+		<div class="cfg-close icon" data-event-click="close()">{{ 'close' | icon }}</div>
+	</div>
+	<div class="rule"/>
+	<div class="addon-body">
+		<div data-for="r : rows">
+			<div class="addon-separator" data-if="r.kind == 'separator'"/>
+			<div class="cfg-row" data-if="r.kind == 'toggle'" data-event-click="flip(it_index)">
+				<div class="cfg-label">{{r.label}}</div>
+				<div class="toggle" data-class-on="r.value == 'true'"><div class="knob"/></div>
+			</div>
+			<div class="cfg-row" data-if="r.kind == 'choice' || r.kind == 'number'">
+				<div class="cfg-label">{{r.label}}</div>
+				<div class="stepper">
+					<div class="arrow" data-event-click="step(it_index, -1)">‹</div>
+					<div class="current">{{r.value + r.suffix}}</div>
+					<div class="arrow" data-event-click="step(it_index, 1)">›</div>
+				</div>
+			</div>
+			<div class="cfg-row" data-if="r.kind == 'text'">
+				<div class="cfg-label">{{r.label}}</div>
+				<input type="text" class="addon-text" data-attr-value="r.value" data-event-change="typed(it_index)"/>
+			</div>
+			<div class="cfg-row addon-status" data-if="r.kind == 'status'" data-class-tone-warn="r.tone == 'warn'">
+				<div class="cfg-label">{{r.label}}</div>
+				<div class="cfg-value">{{r.value + r.suffix}}</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+</body>
+</rml>

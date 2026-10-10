@@ -1,0 +1,26 @@
+<rml>
+<head>
+<title>xirml chat log</title>
+<link type="text/template" href="xirml:theme"/>
+<style>
+/* Messages wrap to the rendered width and stack above the client's newest-line anchor.
+   The panel never takes the mouse: tabs, scrolling and clicks stay native, at the same positions. */
+body { width: 100%; height: 100%; }
+/* The oldest line can lie above the glass without increasing its scroll size. Always clip, including on square frame themes. */
+.chat-glass { clip: always; }
+.chat-label { padding: 0 2dp; }
+</style>
+</head>
+<body data-model="chat">
+<div class="shell" id="shell">
+<div class="chat-glass" id="panel" data-style-top="(6 + glass_top) + 'dp'">
+	<div class="chat-tab" data-for="t : tabs" data-class-active="t.active" data-style-left="(t.x - 1) + 'dp'" data-style-top="(t.y - 1) + 'dp'" data-style-width="(t.active ? t.full : t.width) + 'dp'">{{t.label}}</div>
+	<div class="chat-label" data-for="l : labels" data-attr-class="'chat-label tone-' + l.tone" data-style-left="(l.x - 1) + 'dp'" data-style-top="(l.y - 1) + 'dp'">{{l.text}}</div>
+	<div class="chat-lines"><div class="chat-lines-content" data-style-height="chat_bottom + 'dp'"><div class="chat-lines-stack">
+		<div class="chat-line" data-for="line : lines" data-style-margin-left="(line.x - 1) + 'dp'" data-attr-native-y="line.y"><span data-for="s : line.spans" data-attr-class="(s.phrase ? 'phrase' : 'tone-' + s.tone)" data-attr-style="s.colour == '' ? '' : 'color: ' + s.colour">{{s.text}}</span></div>
+	</div></div></div>
+	<div class="chat-scroll" data-if="scroll_shown" data-style-left="(scroll_x - 1) + 'dp'" data-style-top="(scroll_top - 1) + 'dp'" data-style-height="scroll_height + 'dp'"><div class="chat-thumb" data-style-top="thumb_top + 'dp'" data-style-height="thumb_height + 'dp'"/></div>
+</div>
+</div>
+</body>
+</rml>

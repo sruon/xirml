@@ -1,0 +1,4 @@
+/* cursor = subtle: a soft fill behind the selected row, without an edge or bar */
+.cursor { border-radius: 2dp; decorator: linear-gradient(90deg, var(--cursor-soft), var(--cursor-soft-end)); box-shadow: none; }
+.cursor-bar { display: none; }
+.cell-cursor { box-shadow: none; background-color: var(--cursor-soft); }

@@ -1,0 +1,12 @@
+/* cursor_pointer = arrow: the game's menu arrow, 32x20 dp, left of the highlight with its tip touching it */
+.cursor-pointer {
+	display: block;
+	left: -32dp; width: 32dp; height: 20dp; margin-top: -10dp;
+	decorator: image(xiframe:arrow contain);
+}
+
+/* in a game menu the highlight starts at the game's button, which leaves less room, so the arrow is drawn smaller */
+.glass > .cursor { left: 16dp; }
+.glass > .cursor .cursor-pointer { left: -22dp; width: 22dp; height: 14dp; margin-top: -7dp; }
+.list .cursor { left: 32dp; }
+.list .row { padding-left: 34dp; }

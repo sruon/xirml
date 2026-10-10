@@ -1,0 +1,200 @@
+<rml>
+<head>
+<title>xirml native screen</title>
+<link type="text/template" href="xirml:theme"/>
+<style>
+body { width: 100%; height: 100%; }
+.glass { display: block; width: var(--window-width); height: auto; right: auto; bottom: auto; }
+.menu-column .glass { width: var(--menu-column-width); }
+/* a small fixed info box (the friend list's Handle): the client's 112 px box, tight rows, so it keeps its corner */
+.native-box .glass { width: 112dp; }
+.native-box .contract-content { padding: 2dp 8dp; }
+.native-box .screen-slot.role-row, .native-box .screen-slot.role-row .screen-field { min-height: 0; padding-top: 0; padding-bottom: 0; font-size: var(--size-small); line-height: 12dp; white-space: nowrap; }
+/* a narrow column gives a value the room it takes, not the wide value column (the party languages' letters) */
+.menu-column .screen-field.role-value { min-width: 0; padding-left: 6dp; }
+.description .glass { width: var(--window-description-width); }
+.options .glass { width: var(--window-options-width); }
+.palette .glass { width: 640dp; }
+.palette .contract-content { display: flex; flex-wrap: wrap; padding: 0 8dp; }
+/* each key a recessed tile, like the equipment cells, with a gap between them */
+.palette .screen-slot { flex: 0 0 9.4%; box-sizing: border-box; margin: 2dp 0.3%; padding: 3dp 3dp; border-radius: 5dp; decorator: radial-gradient(circle at 50% 70%, #ffffff0d, #00000073); box-shadow: #000000a6 0 1dp 3dp 0 inset, #ffffff12 0 0 0 1dp inset; }
+.palette .screen-field.role-key { white-space: nowrap; text-align: right; color: var(--ink-dim); }
+.palette .screen-field.role-name { flex: 1 0 100%; min-height: 20dp; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.palette .screen-field.role-key { flex: 1 0 100%; font-size: var(--size-macro-key); }
+.screen-slot.role-palette-key.selected { background-color: var(--gold)1a; box-shadow: var(--gold)99 0 0 0 1dp inset; }
+.search .glass { width: 480dp; }
+.influence .glass { width: var(--sheet-width); }
+.craft .glass, .profile .glass { width: var(--window-width); }
+.craft .screen-field, .profile .screen-field { white-space: nowrap; }
+/* the client draws some profile rows as one "Label: value" string and splits others: every row reads label then value */
+.profile .screen-slot .screen-field { flex: 0 0 auto; }
+.profile .screen-slot .screen-field.role-value { min-width: 0; padding-left: 0; text-align: left; }
+.profile .screen-slot.role-meter .screen-field { flex: 1 1 auto; }
+.profile .screen-slot.role-pair .screen-field { flex: 0 0 50%; box-sizing: border-box; }
+.craft .screen-field.role-value { min-width: 40dp; }
+.screen-field.role-note { flex: 1 0 100%; color: var(--ink-soft); }
+.item-grid .contract-content { display: flex; flex-wrap: wrap; }
+/* a slot is a well whether or not something is in it (the equipment grid's cell) */
+.item-grid .screen-slot.role-item-slot {
+	box-sizing: border-box; flex: 0 0 25%; min-height: 56dp;
+	decorator: radial-gradient(circle at 50% 70%, #ffffff08, #00000080);
+	box-shadow: #000000a6 0 1dp 3dp 0 inset, #ffffff0d 0 -1dp 0 0 inset;
+}
+.item-grid .screen-slot.role-item-slot .screen-field.role-image { flex: 1 0 100%; text-align: center; }
+.item-grid .screen-slot.role-item-slot .screen-field.role-image img { width: 32dp; height: 32dp; }
+.item-grid .screen-field.role-empty-label { flex: 1 0 100%; text-align: center; font-size: 11dp; }
+.item-grid .screen-field.role-count { position: absolute; right: 2dp; bottom: 0; }
+.item-grid .screen-slot.role-heading { flex: 1 0 100%; }
+.label-grid .contract-content { display: flex; flex-wrap: wrap; }
+.label-grid .screen-slot { box-sizing: border-box; flex: 0 0 50%; margin: 0; }
+.craft .contract-content, .profile .contract-content { padding: 4dp 10dp 7dp; }
+.craft .screen-slot.role-skill, .profile .screen-slot { min-height: 15dp; }
+.craft .screen-field.role-rank { color: var(--ink-soft); }
+
+.contract-content { padding: 6dp 10dp 8dp 20dp; }
+/* no buttons, no cursor: the gutter that keeps room for one goes (the gil box, region info, the item description) */
+.still .contract-content { padding-left: 10dp; }
+/* and in a narrow column its heading is a caption in the body face, so "Current Gil" stays on one line beside its coin */
+.still.menu-column .screen-slot.role-heading .screen-field.role-title { font-family: var(--font-body); font-size: var(--size-body); letter-spacing: 0; white-space: nowrap; }
+.screen-slot { position: relative; display: flex; flex-wrap: wrap; align-items: center; min-height: var(--window-row-height); border-radius: var(--radius-row); }
+.screen-slot.action:hover { background-color: #ffffff0b; }
+.screen-slot.role-choice, .screen-slot.role-macro-name, .screen-slot.role-item-slot { border: 1dp transparent; }
+.screen-slot.role-choice.selected, .screen-slot.role-macro-name.selected, .screen-slot.role-item-slot.selected { background-color: var(--gold)1a; border-color: var(--gold); }
+.cursor { left: 3dp; right: 3dp; height: 18dp; }
+.screen-field.role-message { text-align: center; }
+.screen-slot.selected .screen-field { color: var(--white); font-effect: var(--glow-selected); }
+.screen-slot.disabled { opacity: 0.5; }
+.screen-slot.current { box-shadow: var(--gold-hi) 0 -1dp 0 0 inset; }
+.screen-slot.role-heading { padding: 3dp 0 5dp; border-bottom: 1dp var(--gold)52; }
+/* a window that is only its heading (the equipped linkshell) has nothing to rule off */
+.screen-slot.role-heading:last-child { padding-bottom: 0; border-bottom-width: 0; }
+.screen-slot.role-section { padding-top: 5dp; }
+/* rows under a section heading (missions, merit categories) sit one step in */
+.screen-slot.role-section ~ .screen-slot.role-row { padding-left: 12dp; }
+.screen-slot.role-choice { display: inline-flex; min-width: 56dp; margin-right: 6dp; padding: 2dp 5dp; }
+.options .screen-slot.role-choice { min-width: 80dp; }
+/* config pages: the option name in gold over its choices; the choices dim, the one in effect bright */
+.options .screen-slot.role-section .screen-field { color: var(--gold); font-size: var(--size-small); letter-spacing: 0.3dp; }
+.options .screen-slot.role-choice .screen-field { color: var(--ink-dim); }
+.options .screen-slot.role-choice.current .screen-field, .options .screen-slot.role-choice.selected .screen-field { color: var(--white); }
+.screen-slot.role-choice .screen-field { white-space: nowrap; }
+/* page arrows sit on the title line, not as rows of the list: together at its end beside a left-aligned title
+   (frame.rcss puts them either side of a centred one, where the client draws them) */
+.screen-slot.role-page-prev, .screen-slot.role-page-next { position: absolute; top: 6dp; min-height: var(--window-row-height); padding: 0 2dp; }
+.screen-slot.role-page-prev { right: 38dp; }
+.screen-slot.role-page-next { right: 5dp; }
+/* a narrow column leaves its title little room: the arrows step down a size */
+.menu-column .screen-slot.role-page-prev .screen-field, .menu-column .screen-slot.role-page-next .screen-field { font-size: var(--size-tiny); }
+.screen-slot.role-page-prev .screen-field, .screen-slot.role-page-next .screen-field { flex: 0 0 auto; white-space: nowrap; font-size: var(--size-small); color: var(--ink-soft); }
+.screen-slot.role-macro-name { display: inline-flex; width: 47%; margin-right: 3%; }
+/* macro editor: Prev, the key, Next on one row (the contract lists them in that order), the name and lines under it */
+.macro .contract-content { display: flex; flex-wrap: wrap; align-items: center; }
+.macro .screen-slot { flex: 0 0 100%; box-sizing: border-box; }
+.macro .screen-slot.role-choice { flex: 0 0 auto; min-width: 64dp; margin: 0; justify-content: center; }
+.macro #screen-slot-2 { flex: 1 1 0; width: auto; margin: 0; justify-content: center; }
+.macro #screen-slot-2 .screen-field { flex: 0 0 auto; }
+/* the name is typed in like the lines under it: the same input box, half as wide as it holds eight characters */
+.macro #screen-slot-4 { flex: 0 0 50%; min-height: 22dp; margin: 2dp 25%; padding: 2dp 5dp; border: 1dp var(--gold)40; }
+.screen-slot.role-entry { min-height: 22dp; margin: 2dp 0; padding: 2dp 5dp; border: 1dp var(--gold)40; }
+.comment .screen-slot.role-entry { border-width: 0; }
+.screen-field { position: relative; flex: 1; min-width: 0; padding: 1dp 3dp; white-space: normal; word-break: break-word; line-height: 1.35; color: var(--ink); font-size: var(--size-body); }
+.screen-field.role-title { color: var(--title); font-family: var(--font-title); font-size: var(--size-title); font-weight: bold; letter-spacing: var(--tracking-title); }
+.screen-field.role-value, .screen-field.role-count { flex: 0 0 72dp; text-align: right; font-family: var(--font-numbers); color: var(--value-ink); }
+/* a value is one line: its column is 72dp or as wide as the value (a linkshell's name beside its pearl) */
+.screen-field.role-value { flex: 0 0 auto; min-width: 72dp; white-space: nowrap; }
+/* a value alone in its row (gil, unity points, merit totals) takes the row instead of the value column */
+.screen-slot.single .screen-field.role-value { flex: 1 1 auto; }
+.screen-field.role-image { flex: 0 0 20dp; width: 20dp; }
+/* free text keeps the client's line starts (a quest's Client: and Summary:) */
+.screen-field.role-description { white-space: pre-line; padding-top: 3dp; padding-bottom: 3dp; line-height: 1.5; }
+/* the item description: its icon and name head the text; the tags (rare, exclusive) follow the name */
+.description .screen-slot.role-heading .screen-field.role-title { font-family: var(--font-body); font-size: var(--size-body); letter-spacing: 0; color: var(--white); }
+.screen-field.role-image img { width: 16dp; height: 16dp; }
+.screen-field.role-gauge { flex: 1 0 100%; }
+.screen-slot.role-slider { flex-wrap: nowrap; }
+.screen-slot.role-slider .screen-field.role-label { flex: 0 0 40dp; white-space: nowrap; }
+.screen-field.role-slider { flex: 1; }
+
+.screen-field .gauge { position: relative; height: 8dp; margin: 3dp 0; }
+.screen-field .gauge-fill { position: absolute; left: 0; top: 0; bottom: 0; }
+.screen-field .slider { position: relative; width: 100%; max-width: none; height: 16dp; margin: 0; }
+.screen-field .status-dot { position: relative; display: inline-block; width: 10dp; height: 10dp; border-radius: 5dp; margin-right: 4dp; }
+/* the online status: three tiles side by side, the light over its name, as the client lays them out */
+.status-tiles .contract-content { display: flex; padding-left: 10dp; }
+.status-tiles .screen-slot.role-choice { flex: 1 1 0; flex-direction: column; flex-wrap: nowrap; align-items: center; min-width: 0; margin: 0 3dp; padding: 4dp 0 2dp; }
+.status-tiles .screen-slot.role-choice .screen-field { flex: 0 0 auto; width: auto; text-align: center; }
+.status-tiles .screen-field .status-dot { width: 14dp; height: 14dp; border-radius: 7dp; margin: 2dp 0; }
+.status-dot.s-online { background-color: var(--status-online); box-shadow: var(--status-online)80 0 0 5dp 0; }
+.status-dot.s-away { background-color: var(--status-away); box-shadow: var(--status-away)80 0 0 5dp 0; }
+.status-dot.s-invisible { box-shadow: var(--status-invisible) 0 0 0 2dp inset; }
+.status-dot.s-offline { background-color: var(--status-offline); }
+.numeric-digit.selected { color: var(--gold-hi); background-color: var(--gold)26; }
+/* the quantity picker as the client lays it out: + above the value, - below, the two jumps (All, 1) left and right of it */
+.quantity .glass { width: 224dp; }
+.quantity .contract-content { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; padding: 3dp 10dp 3dp 20dp; }
+.quantity .screen-slot { flex: 0 0 auto; flex-wrap: nowrap; justify-content: center; min-height: 16dp; border: 1dp transparent; }
+.quantity .screen-slot.role-step-up, .quantity .screen-slot.role-step-down, .quantity .screen-slot.role-metadata { flex: 0 0 100%; }
+.quantity .screen-slot.role-step-left, .quantity .screen-slot.role-step-right { padding: 0 6dp; }
+.quantity .screen-slot.role-quantity-value { padding: 0 4dp; }
+.quantity .screen-slot .screen-field { flex: 0 0 auto; white-space: nowrap; color: var(--ink-soft); }
+/* room for the largest price (99,999,999 G), so the arrows beside it hold still while digits are typed */
+.quantity .screen-slot .screen-field.role-number { min-width: 96dp; text-align: center; font-family: var(--font-numbers); color: var(--ink); }
+.quantity .screen-slot.selected { background-color: var(--gold)1a; border-color: var(--gold); }
+/* an item grid whose actions sit right of its rows (synthesis, the delivery box): four slots and one action to a row */
+.actions-right .screen-slot.role-item-slot, .actions-right .screen-slot.role-choice { flex: 0 0 20%; }
+.actions-right .screen-slot.role-choice { box-sizing: border-box; min-width: 0; min-height: 56dp; margin: 0; padding: 0; justify-content: center; }
+.screen-field.role-decoration, .screen-field.role-mark { display: none; }
+/* a key item the player hasn't examined: the client marks it, we show a dot before its name */
+.screen-field.role-unread { position: absolute; left: -9dp; top: 50%; margin-top: -6dp; font-size: 8dp; line-height: 12dp; color: var(--gold-hi); }
+.screen-field.tone-dim { color: var(--ink-disabled); }
+.screen-field.tone-blue, .screen-slot.selected .screen-field.tone-blue { color: var(--blue); }
+.screen-field.tone-red { color: var(--red); }
+.screen-field.tone-green { color: var(--green); }
+.screen-field.tone-violet { color: var(--violet); }
+.screen-field.role-mission-current, .screen-slot.selected .screen-field.role-mission-current { color: var(--gold-hi); }
+.screen-field.tone-gold { color: var(--gold-hi); }
+.search .screen-slot { flex-wrap: nowrap; }
+/* a result is one line whatever the column holds */
+.search .screen-field { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.search .screen-field.role-job { flex: 0 0 94dp; }
+.search .screen-field.role-race { flex: 0 0 78dp; }
+/* the last column: the area, or the language letter when the list is toggled; the client gives it 110 px */
+.search .screen-field.role-language { flex: 0 0 110dp; }
+.search .screen-field.role-rank { flex: 0 0 20dp; }
+.search .screen-field.role-name { flex: 1; }
+.currency .screen-field.tone-red, .currency .screen-field.tone-gold { color: var(--ink); }
+.currency .screen-field.role-value.tone-red, .currency .screen-field.role-value.tone-gold { color: var(--value-ink); }
+.currency .screen-slot.selected .screen-field { color: var(--white); }
+.entry-phrase { color: var(--ink); }
+.phrase-open { color: var(--green); }
+.phrase-close { color: var(--red); }
+.caret { display: inline-block; width: 1dp; height: 14dp; background-color: var(--white); }
+</style>
+</head>
+<body data-model="xirml" data-attr-class="'contract ' + screen.layout + (screen.buttons == 0 ? ' still' : '')" data-event-mousedown="panelPress()">
+<div class="shell"><div class="glass" id="panel" fit-content>
+<div class="sheen"/>
+<!-- before the content, so the highlight is painted under the rows -->
+<div class="cursor" data-style-transform="'translateY(' + cursorY + 'dp)'" data-style-height="cursorHeight + 'dp'" data-class-idle="!screen.focused" data-class-none="!hasCursor"><div class="cursor-bar"/><div class="cursor-pointer"/></div>
+<div class="contract-content">
+  <div data-for="slot : screen.slots" data-if="slot.visible"
+       data-attr-id="'screen-slot-' + it_index"
+       data-attr-button="slot.button"
+       data-attr-class="'screen-slot role-' + slot.role + (slot.button > 0 ? ' action' : '') + (slot.button > 0 &amp;&amp; selected == slot.button ? ' selected' : '') + (!slot.enabled ? ' disabled' : '') + (slot.current ? ' current' : '') + (slot.fields.size == 1 ? ' single' : '')"
+       data-event-mousedown="press(slot.button)" data-event-dblclick="confirm(slot.button)">
+    <div data-for="field : slot.fields" data-attr-class="'screen-field role-' + field.role + ' tone-' + field.tone">
+      <span data-if="field.visible &amp;&amp; field.role != 'image' &amp;&amp; field.role != 'gauge' &amp;&amp; field.role != 'slider' &amp;&amp; field.role != 'key' &amp;&amp; field.role != 'sample' &amp;&amp; field.role != 'friend-name'" data-rml="field.rich"/>
+      <span data-if="field.visible &amp;&amp; field.role == 'friend-name'" data-rml="field.text | friendName"/>
+      <span data-if="field.visible &amp;&amp; field.role == 'key'" data-rml="field.text | key"/>
+      <span data-if="field.visible &amp;&amp; field.role == 'sample'" data-rml="field.rich" data-style-color="field.colour | colour"/>
+      <img data-if="field.role == 'image' &amp;&amp; (field.visible || field.image == 0) &amp;&amp; (field.image | image(slot.button, it_index)) != ''" data-attr-src="field.image | image(slot.button, it_index)" data-style-image-color="field.colour | imageTint"/>
+      <div data-if="field.visible &amp;&amp; field.role == 'image' &amp;&amp; field.text != ''" data-attr-class="'status-dot s-' + field.text"/>
+      <div data-if="field.visible &amp;&amp; field.role == 'gauge'" data-attr-class="'gauge g-' + field.tone"><div class="gauge-fill" data-style-width="(field.fill * 100) + '%'"/></div>
+      <input data-if="field.visible &amp;&amp; field.role == 'slider'" type="range" class="slider" min="0" max="100" step="1"
+             data-attr-value="field.fill | slideValue(slot.button)" data-event-change="slide(slot.button)"/>
+    </div>
+  </div>
+</div>
+</div></div>
+</body>
+</rml>
